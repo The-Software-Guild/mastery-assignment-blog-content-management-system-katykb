@@ -57,14 +57,15 @@ public class AdminController {
     
     @GetMapping("/signup")
     public String getCreateAccountPage(Model model) {
-        Author author = new Author();
-        model.addAttribute("author", author);
 
         return "addAccount";
     }
     
     @PostMapping("/signup")
-    public String createAccount(Author author) {
+    public String createAccount(Author author, Model model) {
+
+        model.addAttribute("author", author);
+
         Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
         violations = validate.validate(author);
 
@@ -82,7 +83,7 @@ public class AdminController {
     
     @PostMapping("/login")
     public String loginAdmin() {
-
+// code
         return "redirect:/adminHome";
     }
     
