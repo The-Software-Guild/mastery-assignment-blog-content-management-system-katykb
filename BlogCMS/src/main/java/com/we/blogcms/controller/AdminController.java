@@ -40,14 +40,14 @@ public class AdminController {
     @Autowired
     AuthorDao authorDao;
 
-    @Autowired
+//    @Autowired
 
-    @GetMapping
-    public String getManagerBlogsPage(Model model) {
-        //For marketing only add their own blogs to the controller
-        //For managers add everyone's blogs to the controller
-        return "adminHome";
-    }
+//    @GetMapping
+//    public String getManagerBlogsPage(Model model) {
+//        //For marketing only add their own blogs to the controller
+//        //For managers add everyone's blogs to the controller
+//        return "adminHome";
+//    }
     
     @PostMapping
     public String searchForAdminBlogsWithTags() {
