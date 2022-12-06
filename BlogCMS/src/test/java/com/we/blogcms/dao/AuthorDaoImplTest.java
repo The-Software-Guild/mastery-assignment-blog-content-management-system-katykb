@@ -117,7 +117,7 @@ class AuthorDaoImplTest {
 
     @Test
     void updateAuthor(){
-    Author author = new Author();
+        Author author = new Author();
         author.setStatus(Status.active);
         author.setFirstName("Sophia");
         author.setLastName("Amarouso");
@@ -146,7 +146,6 @@ class AuthorDaoImplTest {
 
     @Test
     void getPostAuthor() {
-        //TODO fill in after I update methods that need post info
     }
 
     @Test

@@ -17,7 +17,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository
-public class AuthorDaoImpl implements AuthorDao{
+public class AuthorDaoImpl implements AuthorDao {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -30,7 +30,7 @@ public class AuthorDaoImpl implements AuthorDao{
     public Author addAuthor(Author author) {
         final String INSERT_AUTHOR =
                 "INSERT INTO author(status, firstName, lastName, role, displayName, email, password, createdAt, updatedAt)"
-                + " VALUES(?,?,?,?,?,?,?,?,?)";
+                        + " VALUES(?,?,?,?,?,?,?,?,?)";
         jdbcTemplate.update(INSERT_AUTHOR,
                 author.getStatus().toString(),
                 author.getFirstName(),
@@ -65,11 +65,11 @@ public class AuthorDaoImpl implements AuthorDao{
     @Override
     @Transactional
     public Author getAuthorById(int authorId) {
-        try{
+        try {
             final String SELECT_AUTHOR_BY_ID = "SELECT * FROM author WHERE authorId = ?";
             Author author = jdbcTemplate.queryForObject(SELECT_AUTHOR_BY_ID, new AuthorMapper(), authorId);
             return author;
-        }catch (DataAccessException ex){
+        } catch (DataAccessException ex) {
             return null;
         }
     }
@@ -137,6 +137,5 @@ public class AuthorDaoImpl implements AuthorDao{
             author.setUpdatedAt(rs.getTimestamp("updatedAt").toLocalDateTime());
             return author;
         }
-
     }
 }
