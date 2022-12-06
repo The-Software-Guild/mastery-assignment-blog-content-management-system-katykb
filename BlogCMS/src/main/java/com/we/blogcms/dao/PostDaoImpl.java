@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,18 +34,19 @@ public class PostDaoImpl implements PostDao{
     @Override
     @Transactional
     public Post addPost(Post post) {
-        updatePostTags(post);
-        final String INSERT_POST = "INSERT INTO post (status, activationDate,expirationDate , title, headline)"
-                + " VALUES (" + post.getStatus() + daoHelper.DELIMITER
-                + post.getActivationDate() + daoHelper.DELIMITER +
-                post.getExpirationDate() + daoHelper.DELIMITER +
-                post.getTitle() + daoHelper.DELIMITER +
-                post.getHeadline() + ")";
+        final String INSERT_POST = "INSERT INTO post (status, activationDate, expirationDate, title, headline)"
+                + " VALUES (" + daoHelper.SINGLE_QUOTE + post.getStatus() + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
+                + daoHelper.SINGLE_QUOTE + Timestamp.valueOf(post.getActivationDate()) + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
+                + daoHelper.SINGLE_QUOTE + Timestamp.valueOf(post.getExpirationDate()) + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
+                + daoHelper.SINGLE_QUOTE + post.getTitle() + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
+                + daoHelper.SINGLE_QUOTE + post.getHeadline() + daoHelper.SINGLE_QUOTE + ")";
         jdbc.update(INSERT_POST);
         int postId = jdbc.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
         post.setPostId(postId);
-        return post;
-
+        updatePostTags(post);
+        addPostBody(post.getBody().getBodyId(), post.getPostId());
+        addPostAuthor(post.getAuthor().getAuthorId(), post.getPostId());
+        return getPostById(post.getPostId());
     }
     private void updatePostTags(Post post) {
         removedNeededPostTags(post);
@@ -71,7 +73,17 @@ public class PostDaoImpl implements PostDao{
                 createNotInTagIdText(post.getTags());
         jdbc.update(UPDATE_POST_TAGS, post.getPostId());
     }
+    private void addPostBody(int bodyId, int postId) {
+        final String ADD_BODY = "INSERT INTO postbody(bodyId,postId) "
+                + "VALUES(?,?);";
+        jdbc.update(ADD_BODY, bodyId, postId);
+    }
 
+    private void addPostAuthor(int authorId, int postId) {
+        final String ADD_AUTHOR = "INSERT INTO postauthor(authorId,postId) "
+                + "VALUES(?,?);";
+        jdbc.update(ADD_AUTHOR, authorId, postId);
+    }
     private String createNotInTagIdText(List<Tag> tagsParam) {
         String notInString = "(";
         for (int index = 0; index < tagsParam.size(); index += 1) {
@@ -93,7 +105,7 @@ public class PostDaoImpl implements PostDao{
     private List<Tag> getcurrentPostTags(Post post) {
         final String CURRENT_POST_TAGS = "SELECT t.* FROM "
                 + "tag t INNER JOIN posttag pt ON t.tagId = pt.tagId "
-                + "AND p.postId = ?";
+                + "AND pt.postId = ?";
         final List<Tag> currentTags = jdbc.query(CURRENT_POST_TAGS,
                 new TagDaoImpl.TagMapper(), post.getPostId());
         return currentTags;
@@ -108,8 +120,6 @@ public class PostDaoImpl implements PostDao{
         }
         return tagsToUpdate;
     }
-
-
     @Override
     public List<Post> getAllPosts() {
         final String GET_ALL_POSTS = "SELECT * FROM post;";
@@ -117,7 +127,6 @@ public class PostDaoImpl implements PostDao{
         associateTagsBodyAuthorOfPosts(posts);
         return posts;
     }
-
     private void associateTagsBodyAuthorOfPosts(List<Post> posts){
         for(Post post : posts){
             post.setTags(tagDao.getPostTagsForStatuses(post.getPostId(),Status.active));
@@ -125,8 +134,6 @@ public class PostDaoImpl implements PostDao{
             post.setBody(bodyDao.getPostBody(post.getPostId()));
         }
     }
-
-
     @Override
     public List<Post> getPostsForAuthor(int authorId, Status... statuses) {
         final String GET_POSTS_FOR_AUTHOR = "SELECT p.* FROM post p INNER JOIN postauthor a ON p.postId = a.postId"
@@ -134,22 +141,38 @@ public class PostDaoImpl implements PostDao{
         final List<Post> posts = jdbc.query(GET_POSTS_FOR_AUTHOR, new PostMapper(), authorId);
         associateTagsBodyAuthorOfPosts(posts);
         return posts;
-
     }
-
     @Override
     public List<Post> getAllPostsForStatuses(Status... statuses) {
-        return null;
+        final String GET_STATUS_POSTS = "SELECT * FROM post WHERE status IN " + daoHelper.createInStatusText(statuses) +
+                " AND (activationDate <= CURRENT_TIMESTAMP OR activationDate IN(NULL))"
+                + "AND (expirationDate > CURRENT_TIMESTAMP OR expirationDate IN(NULL)) ORDER BY createdAt DESC;";
+        List<Post> posts = jdbc.query(GET_STATUS_POSTS, new PostMapper());
+        associateTagsBodyAuthorOfPosts(posts);
+        return posts;
     }
-
     @Override
     public List<Post> getLatestPostsForStatuses(int numOfPosts, Status... statuses) {
-        return null;
+        final String LATEST_SHOWABLE_POSTS = "SELECT * FROM post WHERE status IN "
+                + daoHelper.createInStatusText(statuses)
+                + " AND (activationDate <= CURRENT_TIMESTAMP OR activationDate IN(NULL))"
+                + " AND (expirationDate > CURRENT_TIMESTAMP OR expirationDate IN(NULL)) ORDER BY createdAt DESC LIMIT "
+                + numOfPosts;
+        List<Post> posts = jdbc.query(LATEST_SHOWABLE_POSTS,new PostMapper(), numOfPosts);
+        associateTagsBodyAuthorOfPosts(posts);
+        return posts;
     }
 
     @Override
     public List<Post> getPostsForStatusesByTags(List<Tag> tags, Status... statuses) {
-        return null;
+        final String GET_SHOWABLE_POSTS_BY_TAGS = "SELECT p.* FROM post p INNER JOIN posttag pt ON "
+                + "p.postId = pt.postId WHERE pt.tagId NOT IN " + createNotInTagIdText(tags) +
+                " AND p.status IN " + daoHelper.createInStatusText(statuses) +
+                " AND (activationDate <= CURRENT_TIMESTAMP OR activationDate IN(NULL))"
+                + "AND (expirationDate > CURRENT_TIMESTAMP OR expirationDate IN(NULL)) ORDER BY createdAt DESC;";
+        final List<Post> posts = jdbc.query(GET_SHOWABLE_POSTS_BY_TAGS, new PostMapper());
+        associateTagsBodyAuthorOfPosts(posts);
+        return posts;
     }
 
     @Override
@@ -163,32 +186,42 @@ public class PostDaoImpl implements PostDao{
     }
 
     @Override
+    @Transactional
     public void deletePost(Post post) {
-        DeleteTags(post);
-        DeleteAuthor(post);
-        DeleteBody(post);
+        DeletePostTags(post);
+        DeletePostAuthor(post);
+        DeletePostBody(post);
         final String DELETE_POST = "DELETE FROM post WHERE postId =?";
         jdbc.update(DELETE_POST, post.getPostId());
     }
 
-    private void DeleteBody(Post post) {
-        bodyDao.deleteBodyById(post.getBody().getBodyId());
+    //--------For Deleting Post and the related bridge table data
+    private void DeletePostBody(Post post) {
+        final String DELETE_POST_BODY = "DELETE FROM postbody WHERE postId = ?";
+        jdbc.update(DELETE_POST_BODY, post.getPostId());
     }
 
-    private void DeleteAuthor(Post post) {
+    private void DeletePostAuthor(Post post) {
         final String DELETE_POST_AUTHOR_SQL = "DELETE FROM postauthor WHERE postId = ?";
         jdbc.update(DELETE_POST_AUTHOR_SQL, post.getPostId());
     }
 
-    private void DeleteTags(Post post) {
-        for (Tag tag: post.getTags()) {
-            tagDao.deleteTagById(tag.getTagId());
-        }
+    private void DeletePostTags(Post post) {
+        final String DELETE_POST_TAG = "DELETE FROM posttag WHERE postId = ?";
+        jdbc.update(DELETE_POST_TAG, post.getPostId());
     }
+    //------------------------
 
     @Override
+    @Transactional
     public void updatePost(Post post) {
-
+        updatePostTags(post);
+        final String UPDATE_POST_STATUS = "UPDATE post SET status = ?, title = ?, headline = ?, activationDate = ?,"
+        + " expirationDate = ?  postId = ?";
+        jdbc.update(UPDATE_POST_STATUS, post.getStatus(),
+                post.getTitle(), post.getHeadline(),
+                post.getActivationDate(),
+                post.getExpirationDate(),post.getPostId());
     }
 
     public static final class PostMapper implements RowMapper<Post> {

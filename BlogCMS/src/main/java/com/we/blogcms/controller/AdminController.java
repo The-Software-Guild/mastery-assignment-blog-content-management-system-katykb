@@ -40,7 +40,7 @@ public class AdminController {
     @Autowired
     AuthorDao authorDao;
 
-    @Autowired
+  //  @Autowired
 
     @GetMapping
     public String getManagerBlogsPage(Model model) {
