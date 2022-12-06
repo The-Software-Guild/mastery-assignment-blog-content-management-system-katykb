@@ -4,11 +4,23 @@
  */
 package com.we.blogcms.controller;
 
+import com.we.blogcms.dao.AuthorDao;
+import com.we.blogcms.model.Author;
+import com.we.blogcms.model.Post;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.regex.PatternSyntaxException;
 
 /**
  *
@@ -22,11 +34,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-    
+
+    Set<ConstraintViolation<Author>> violations = new HashSet<>();
+
+    @Autowired
+    AuthorDao authorDao;
+
+    @Autowired
+
     @GetMapping
     public String getManagerBlogsPage(Model model) {
         //For marketing only add their own blogs to the controller
-        //For maanagers add everyone's blogs to the controller
+        //For managers add everyone's blogs to the controller
         return "adminHome";
     }
     
@@ -37,37 +56,51 @@ public class AdminController {
     }
     
     @GetMapping("/signup")
-    public String getCreateAccountPage() {
+    public String getCreateAccountPage(Model model) {
+        Author author = new Author();
+        model.addAttribute("author", author);
+
         return "addAccount";
     }
     
     @PostMapping("/signup")
-    public String creatAccount() {
+    public String createAccount(Author author) {
+        Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
+        violations = validate.validate(author);
+
+        if (violations.isEmpty()) {
+            authorDao.addAuthor(author);
+        }
         return "redirect:/adminHome";
     }
     
     @GetMapping("/login")
     public String getAdminLoginPage() {
+
         return "adminLogin";
     }
     
     @PostMapping("/login")
     public String loginAdmin() {
+
         return "redirect:/adminHome";
     }
     
     @GetMapping("/add-blog")
     public String getAddBlogPage() {
+
         return "addBlog";
     }
     
     @PostMapping("/add-blog")
-    public String addBlog() {
+    public String addBlog(Post post) {
+//        post.setBody(postDao.getAddPost);
+
         return "redirect:/adminHome";
     }
     
     @GetMapping("/edit-blog")
-    public String getEditBlogPage() {
+    public String getEditBlogPage(int id) {
         return "editBlog";
     }
     
