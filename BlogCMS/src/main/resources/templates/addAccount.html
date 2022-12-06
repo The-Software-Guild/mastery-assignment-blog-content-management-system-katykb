@@ -1,65 +1,136 @@
-<!<!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-    xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>Create Account</title>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    </head>
-    <body>
-        <title>Create Account</title>
-  </head>
-  <body>
-    <main class="container">
-            <div class="row m-4">
-                <header class="col text-center border border-dark">
-                    <h1><a href="/" class="text-dark">Welcome Blogger! Add your account</a></h1>
-                </header>
+<!--<!<!doctype html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org"-->
+<!--    xmlns="http://www.w3.org/1999/xhtml">-->
+<!--    <head>-->
+<!--        <title>Create Account</title>-->
+<!--        <meta charset="UTF-8"/>-->
+<!--        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>-->
+<!--        &lt;!&ndash; Bootstrap CSS &ndash;&gt;-->
+<!--        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">-->
+<!--    </head>-->
+<!--    <body>-->
+<!--        <title>Create Account</title>-->
+<!--  </head>-->
+<!--  <body>-->
+<!--    <main class="container">-->
+<!--            <div class="row m-4">-->
+<!--                <header class="col text-center border border-dark">-->
+<!--                    <h1><a href="/" class="text-dark">Welcome Blogger! Add your account</a></h1>-->
+<!--                </header>-->
+<!--            </div>-->
+<!--        <section class="d-flex flex-row flex-sm-wrap justify-content-center">-->
+<!--            <form>-->
+<!--                <div class="form-group">-->
+<!--                    <label for="firstName">First Name</label>-->
+<!--                        -->
+<!--                    <input type="text" class="form-control" name="firstName" -->
+<!--                           id="firstName">-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label for="lastName">Last Name</label>-->
+<!--                        -->
+<!--                    <input type="text" class="form-control" name="lastName" -->
+<!--                           id="lastName">-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label for="displayName">Display Name</label>-->
+<!--                        -->
+<!--                    <input type="text" class="form-control" name="displayName" -->
+<!--                           id="displayName">-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label for="email">Email</label>-->
+<!--                        -->
+<!--                    <input type="email" class="form-control" name="email" -->
+<!--                           id="email">-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label for="password">Password</label>-->
+<!--                        -->
+<!--                    <input type="password" class="form-control" name="password" -->
+<!--                           id="password">-->
+<!--                </div>-->
+<!--                <button type="submit" class="btn btn-primary">Submit</button>-->
+<!--            </form>-->
+<!--        </section>-->
+<!--            -->
+<!--    </main>-->
+<!--    -->
+<!--    &lt;!&ndash; Optional JavaScript &ndash;&gt;-->
+<!--    &lt;!&ndash; jQuery first, then Popper.js, then Bootstrap JS &ndash;&gt;-->
+<!--    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>-->
+<!--    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>-->
+<!--    </body>-->
+<!--</html>-->
+
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Transparent Login Form HTML CSS</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
+</head>
+
+<body>
+<div class="bg-img">
+    <div class="content">
+
+        <!-- success message -->
+        <!-- <div th:if="${param.success}">
+            <div class="alert alert-info">You've successfully registered to our awesome blog!
+
             </div>
-        <section class="d-flex flex-row flex-sm-wrap justify-content-center">
-            <form>
-                <div class="form-group">
-                    <label for="firstName">First Name</label>
-                        
-                    <input type="text" class="form-control" name="firstName" 
-                           id="firstName">
-                </div>
-                <div class="form-group">
-                    <label for="lastName">Last Name</label>
-                        
-                    <input type="text" class="form-control" name="lastName" 
-                           id="lastName">
-                </div>
-                <div class="form-group">
-                    <label for="displayName">Display Name</label>
-                        
-                    <input type="text" class="form-control" name="displayName" 
-                           id="displayName">
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                        
-                    <input type="email" class="form-control" name="email" 
-                           id="email">
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                        
-                    <input type="password" class="form-control" name="password" 
-                           id="password">
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
-        </section>
-            
-    </main>
-    
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    </body>
+
+        </div> -->
+        <h1>Registration</h1>
+        <form action="@{/registration}" method="POST" th:object="${author}">
+
+
+            <div class="field">
+                <span class="fa fa-user"></span>
+
+                <input type="text" required placeholder="First name" th:field="*{firstName}" autofocus="autofocus">
+                <span class="show">SHOW</span>
+
+            </div>
+            <div class="field space">
+                <span class="fa fa-user"></span>
+
+                <input type="text" required placeholder="Last name" th:field="*{lastName}" autofocus="autofocus">
+                <span class="show">SHOW</span>
+            </div>
+
+            <div class="field space">
+                <span class="fa fa-envelope"></span>
+
+                <input type="text" class="pass-key" required placeholder="Email" th:field="*{email}" autofocus="autofocus">
+                <span class="show">SHOW</span>
+            </div>
+
+            <div class="field space">
+                <span class="fa fa-lock"></span>
+                <input type="password" class="pass-key" placeholder="Password" th:field="*{password}" required autofocus="autofocus">
+                <span class="show">SHOW</span>
+            </div>
+
+            <br />
+            <div class="field">
+                <input type="submit" value="SIGNUP">
+            </div>
+        </form>
+
+        <div class="signup">
+                <span>Already registered?
+                    <a href="/" th:href="@{/adminLogin}">Login here</a></span>
+        </div>
+    </div>
+</div>
+
+</body>
+
 </html>

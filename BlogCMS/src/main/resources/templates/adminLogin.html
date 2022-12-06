@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>Transparent Login Form HTML CSS</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+
+</head>
+<body>
+<div class="bg-img">
+    <div class="content">
+        <h1> User Login</h1>
+        <form action="@{/login}" method="POST">
+
+            <!-- error message, check this later -->
+            <div th:if="${param.error}">Invalid username or password.</div>
+
+            <!-- logout message, need to check this code later -->
+            <div th:if="${param.logout}">
+                <div class="alert alert-info">You have been logged out.</div>
+
+            </div>
+
+            <div class="field">
+                <span class="fa fa-user"></span>
+                <input type="text" required placeholder="Email">
+            </div>
+            <div class="field space">
+                <span class="fa fa-lock"></span>
+                <input type="password" class="pass-key" required placeholder="Password">
+                <span class="show">SHOW</span>
+            </div>
+            <br/>
+            <div class="field">
+                <input type="submit" value="LOGIN">
+            </div>
+        </form>
+
+        <div class="signup">
+               <span>New user?
+               <a href="/" th:href="@{/addAccount">Signup Now</a></span>
+        </div>
+    </div>
+</div>
