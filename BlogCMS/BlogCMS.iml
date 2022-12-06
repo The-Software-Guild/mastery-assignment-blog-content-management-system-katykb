@@ -6,8 +6,7 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/Test/Java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/Test/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
@@ -23,6 +22,9 @@
     <orderEntry type="library" name="Maven: jakarta.annotation:jakarta.annotation-api:2.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.yaml:snakeyaml:1.33" level="project" />
     <orderEntry type="library" name="Maven: com.zaxxer:HikariCP:5.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-jdbc:6.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-beans:6.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-tx:6.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-thymeleaf:3.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.thymeleaf:thymeleaf-spring6:3.1.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.thymeleaf:thymeleaf:3.1.0.RELEASE" level="project" />
@@ -48,6 +50,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:6.0.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.springframework.boot:spring-boot-devtools:3.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:3.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:3.0.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: com.mysql:mysql-connector-j:8.0.31" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-starter-test:3.0.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-test:3.0.0" level="project" />
@@ -92,9 +95,5 @@
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-core:6.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-crypto:6.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-web:6.0.0" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-jdbc:6.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-beans:6.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-tx:6.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:3.0.0" level="project" />
   </component>
 </module>
