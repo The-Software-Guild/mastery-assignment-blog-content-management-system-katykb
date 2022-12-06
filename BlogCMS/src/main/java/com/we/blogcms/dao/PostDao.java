@@ -18,7 +18,7 @@ public interface PostDao {
     /**
      * Adds a post to the database
      *
-     * @param Post object to save to the database
+     * @param post Post object to save to the database
      * @return Post added to the database, null otherwise
      */
     public Post addPost(Post post);
@@ -42,7 +42,7 @@ public interface PostDao {
     /**
      * Retrieves all posts of the specified statuses from the database
      *
-     * @param none
+     * @param Status... statuses the posts should be in
      * @return List<Post> list of post instances with the specified 
      * statuses, from the database
      */
@@ -78,9 +78,9 @@ public interface PostDao {
     /**
      * Gives post in the database a status of deleted
      *
-     * @param Post post object to delete assocaited information 
+     * @param post post object to delete associated information 
      * from the database
-     * @return Post object instance representing post deleted from the 
+     * @return post object instance representing post deleted from the 
      * database, null if no post was deleted
      */
     public void deletePost(Post post);
