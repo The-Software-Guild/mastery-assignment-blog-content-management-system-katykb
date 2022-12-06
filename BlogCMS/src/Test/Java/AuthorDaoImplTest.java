@@ -1,6 +1,6 @@
-package com.we.blogcms.dao;
-
 import com.we.blogcms.TestApplicationConfiguration;
+import com.we.blogcms.dao.AuthorDao;
+import com.we.blogcms.dao.PostDao;
 import com.we.blogcms.model.*;
 import com.we.blogcms.model.Tag;
 import org.junit.jupiter.api.*;
@@ -21,8 +21,8 @@ class AuthorDaoImplTest {
     AuthorDao authorDao;
 
 
-//    @Autowired
-//    PostDao postDao;
+    @Autowired
+    PostDao postDao;
 
 
     public AuthorDaoImplTest(){
@@ -39,17 +39,15 @@ class AuthorDaoImplTest {
 
     @BeforeEach
     void setUp() {
+        List<Post> posts = postDao.getAllPosts();
+        for(Post post : posts){
+            postDao.deletePost(post);
+        }
 
         List<Author> authors = authorDao.getAllAuthors();
         for(Author author : authors){
             authorDao.deleteAuthor(author);
         }
-
-//        List<Post> posts = postDao.getAllPosts();
-//        for(Post post : posts){
-//            postDao.deletePost(post);
-//        }
-//
     }
 
     @AfterEach
@@ -70,6 +68,7 @@ class AuthorDaoImplTest {
         author.setCreatedAt(Timestamp.valueOf("2023-01-01 06:15:33").toLocalDateTime());
         author.setUpdatedAt(Timestamp.valueOf("2023-01-01 06:15:33").toLocalDateTime());
         author = authorDao.addAuthor(author);
+        author = authorDao.getAuthorById(author.getAuthorId());
 
         Author author1 = new Author();
         author1.setStatus(Status.inactive);
@@ -82,6 +81,7 @@ class AuthorDaoImplTest {
         author1.setCreatedAt(Timestamp.valueOf("2023-02-01 02:01:35").toLocalDateTime());
         author1.setUpdatedAt(Timestamp.valueOf("2023-02-01 02:01:35").toLocalDateTime());
         author1 = authorDao.addAuthor(author1);
+        author1 = authorDao.getAuthorById(author.getAuthorId());
 
         List<Author> authors = authorDao.getAllAuthors();
 
@@ -90,7 +90,6 @@ class AuthorDaoImplTest {
         assertTrue(authors.contains(author1));
 
     }
-
 
     @Test
     void getAuthorById() {
@@ -105,6 +104,7 @@ class AuthorDaoImplTest {
         author.setCreatedAt(Timestamp.valueOf("2023-01-01 06:15:33").toLocalDateTime());
         author.setUpdatedAt(Timestamp.valueOf("2023-01-01 06:15:33").toLocalDateTime());
         author = authorDao.addAuthor(author);
+        author = authorDao.getAuthorById(author.getAuthorId());
 
         Author fromDao = authorDao.getAuthorById(author.getAuthorId());
         assertEquals(author, fromDao);
@@ -128,12 +128,14 @@ class AuthorDaoImplTest {
         author.setCreatedAt(Timestamp.valueOf("2023-01-01 06:15:33").toLocalDateTime());
         author.setUpdatedAt(Timestamp.valueOf("2023-01-01 06:15:33").toLocalDateTime());
         author = authorDao.addAuthor(author);
+        author = authorDao.getAuthorById(author.getAuthorId());
 
         Author authorToUpdate = authorDao.getAuthorById(author.getAuthorId());
         assertEquals(author, authorToUpdate);
 
         authorToUpdate.setFirstName("New Test Name");
         authorDao.updateAuthor(author);
+        author = authorDao.getAuthorById(author.getAuthorId());
 
         assertNotEquals(author, authorToUpdate);
 
@@ -162,6 +164,7 @@ class AuthorDaoImplTest {
         author.setCreatedAt(Timestamp.valueOf("2023-01-01 06:15:33").toLocalDateTime());
         author.setUpdatedAt(Timestamp.valueOf("2023-01-01 06:15:33").toLocalDateTime());
         author = authorDao.addAuthor(author);
+        author = authorDao.getAuthorById(author.getAuthorId());
 
         Author authorToDelete = authorDao.getAuthorById(author.getAuthorId());
         assertEquals(author, authorToDelete);
