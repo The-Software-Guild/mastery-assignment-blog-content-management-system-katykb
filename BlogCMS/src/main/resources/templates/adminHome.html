@@ -35,6 +35,42 @@ xmlns="http://www.w3.org/1999/xhtml">
         </ul>
     </div>
 </nav>
+<div class="row m-4 border border-dark">
+        <div class="col text-center m-3">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Author</th>
+                        <th>Title</th>
+                        <th>Headline</th>
+                        <th>Status</th>
+                        <th>Activation Date</th>
+                        <th>Expiration Date</th>
+                        <th>Creation Date</th>
+                        <th>Last Updated</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="post : ${managerPosts}">
+                        <td th:text="${post.postId}">Post ID</td>
+                        <td th:text="|${post.author.lastName}, ${post.author.firstName}|">Author Name</td>
+                        <td th:text="${post.title}">Post Title</td>
+                        <td th:text="${post.headline}">Post Headline</td>
+                        <td th:text="${post.status.toString()}">Status</td>
+-->                     <td th:text="${post.activationDate != null} ? ${post.activationDate} : 'N/A'">Activation Date</td>
+                        <td th:text="${post.expirationDate != null} ? ${post.expirationDate} : 'N/A'">Expiration Date</td>
+                        <td th:text="${post.createdAt}">Creation Date</td>
+                        <td th:text="${post.updatedAt}">Last Updated</td>
+                        <td><a href="#" th:href="@{/admin/edit(id=${post.postId})}">Edit</a></td>
+                        <td><a href="#" th:href="@{/admin/delete(id=${post.postId})}">Delete</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 <!--Footer-->
 <footer>
     <div class="footer__container">

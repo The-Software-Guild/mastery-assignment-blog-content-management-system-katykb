@@ -40,16 +40,54 @@ public class PostDaoImpl implements PostDao{
     @Override
     @Transactional
     public Post addPost(Post post) {
-        final String INSERT_POST = "INSERT INTO post (status, activationDate, expirationDate, title, headline )"
-                + " VALUES (" + daoHelper.SINGLE_QUOTE + post.getStatus() + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
-                + daoHelper.SINGLE_QUOTE + Timestamp.valueOf(post.getActivationDate()) + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
-                + daoHelper.SINGLE_QUOTE + Timestamp.valueOf(post.getExpirationDate()) + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
+        String INSERT_POST = "";
+        if (post.getActivationDate() != null && 
+                post.getExpirationDate() != null) {
+            INSERT_POST = "INSERT INTO post(status,"
+                + "activationDate,expirationDate,title,"
+                + "headline) VALUES(" + daoHelper.SINGLE_QUOTE + post.getStatus() + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
+                + daoHelper.SINGLE_QUOTE + Timestamp.valueOf(post.getActivationDate()) 
+                + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
+                + daoHelper.SINGLE_QUOTE + Timestamp.valueOf(post.getExpirationDate())
+                + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
                 + daoHelper.SINGLE_QUOTE + post.getTitle() + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
-                + daoHelper.SINGLE_QUOTE + post.getHeadline() + daoHelper.SINGLE_QUOTE + ")";
+                + daoHelper.SINGLE_QUOTE + post.getHeadline() + daoHelper.SINGLE_QUOTE + ");";
+        }
+        if (post.getActivationDate() == null &&
+                post.getExpirationDate() != null) {
+           INSERT_POST = "INSERT INTO post(status,"
+                + "expirationDate,title,"
+                + "headline) VALUES(" + daoHelper.SINGLE_QUOTE + post.getStatus() + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
+                + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
+                + daoHelper.SINGLE_QUOTE + Timestamp.valueOf(post.getExpirationDate())
+                + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
+                + daoHelper.SINGLE_QUOTE + post.getTitle() + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
+                + daoHelper.SINGLE_QUOTE + post.getHeadline() + daoHelper.SINGLE_QUOTE + ");";
+        }
+        
+        if (post.getActivationDate() != null && 
+                post.getExpirationDate() == null) {
+        INSERT_POST = "INSERT INTO post(status,"
+                + "activationDate,title,"
+                + "headline) VALUES(" + daoHelper.SINGLE_QUOTE + post.getStatus() + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
+                + daoHelper.SINGLE_QUOTE + Timestamp.valueOf(post.getActivationDate()) 
+                + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
+                + daoHelper.SINGLE_QUOTE + post.getTitle() + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
+                + daoHelper.SINGLE_QUOTE + post.getHeadline() + daoHelper.SINGLE_QUOTE + ");";
+        }
+        if (post.getActivationDate() == null && 
+                post.getExpirationDate() == null) {
+            INSERT_POST = "INSERT INTO post(status,"
+                + "title,"
+                + "headline) VALUES(" + daoHelper.SINGLE_QUOTE + post.getStatus() + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
+                + daoHelper.SINGLE_QUOTE + post.getTitle() + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
+                + daoHelper.SINGLE_QUOTE + post.getHeadline() + daoHelper.SINGLE_QUOTE + ");";
+        }
         jdbc.update(INSERT_POST);
         int postId = jdbc.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
         post.setPostId(postId);
         updatePostTags(post);
+        post.setBody(bodyDao.addBody(post.getBody()));
         addPostBody(post.getBody().getBodyId(), post.getPostId());
         addPostAuthor(post.getAuthor().getAuthorId(), post.getPostId());
         return getPostById(post.getPostId());
@@ -165,6 +203,15 @@ public class PostDaoImpl implements PostDao{
         return posts;
     }
     @Override
+    public List<Post> getAllPostsForStatusesForAdmin(Status... statuses) {
+        final String GET_STATUS_POSTS = "SELECT * FROM post "
+                + "WHERE status IN " + daoHelper.createInStatusText(statuses)
+                + " ORDER BY createdAt DESC;";
+        List<Post> posts = jdbc.query(GET_STATUS_POSTS, new PostMapper());
+        associateTagsBodyAuthorOfPosts(posts);
+        return posts;
+    }
+    @Override
     public List<Post> getLatestPostsForStatuses(int numOfPosts, Status... statuses) {
         final String LATEST_SHOWABLE_POSTS = "SELECT * FROM "
                 + "post WHERE status IN " + daoHelper.createInStatusText(statuses)
@@ -254,8 +301,12 @@ public class PostDaoImpl implements PostDao{
             post.setTitle(rs.getString("title"));
             post.setHeadline(rs.getString("headline"));
             post.setStatus(Status.valueOf(rs.getString("status")));
-            post.setActivationDate(rs.getTimestamp("activationDate").toLocalDateTime());
-            post.setExpirationDate(rs.getTimestamp("expirationDate").toLocalDateTime());
+            if (rs.getTimestamp("activationDate") != null) {
+               post.setActivationDate(rs.getTimestamp("activationDate").toLocalDateTime()); 
+            }
+            if (rs.getTimestamp("expirationDate") != null) {
+                post.setExpirationDate(rs.getTimestamp("expirationDate").toLocalDateTime());
+            }
             post.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
             post.setUpdatedAt(rs.getTimestamp("updatedAt").toLocalDateTime());
             return post;

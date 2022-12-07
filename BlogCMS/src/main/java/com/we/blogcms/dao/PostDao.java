@@ -41,12 +41,21 @@ public interface PostDao {
     public List<Post> getPostsForAuthor(int authorId, Status... statuses);
     /**
      * Retrieves all posts of the specified statuses from the database
+     * that are not expired and that have been activated
      *
      * @param Status... statuses the posts should be in
      * @return List<Post> list of post instances with the specified 
      * statuses, from the database
      */
     public List<Post> getAllPostsForStatuses(Status... statuses);
+    /**
+     * Retrieves all posts of the specified statuses from the database
+     *
+     * @param Status... statuses the posts should be in
+     * @return List<Post> list of post instances with the specified 
+     * statuses, from the database
+     */
+    public List<Post> getAllPostsForStatusesForAdmin(Status... statuses);
     /**
      * Retrieves the specified amount of active and non-expired posts
      * posts from the databases
