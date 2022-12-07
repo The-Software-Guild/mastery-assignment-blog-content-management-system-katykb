@@ -6,24 +6,22 @@ package com.we.blogcms.controller;
 
 import ch.qos.logback.classic.pattern.ClassOfCallerConverter;
 import com.we.blogcms.dao.AuthorDao;
-import com.we.blogcms.model.Author;
-import com.we.blogcms.model.Post;
-import com.we.blogcms.model.Role;
-import com.we.blogcms.model.Status;
+import com.we.blogcms.dao.BodyDao;
+import com.we.blogcms.dao.PostDao;
+import com.we.blogcms.dao.TagDao;
+import com.we.blogcms.model.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.quartz.QuartzTransactionManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.PatternSyntaxException;
 
 /**
@@ -44,7 +42,14 @@ public class AdminController {
     @Autowired
     AuthorDao authorDao;
 
-//    @Autowired
+    @Autowired
+    PostDao postDao;
+
+    @Autowired
+    TagDao tagDao;
+
+    @Autowired
+    BodyDao bodyDao;
 
     @GetMapping
     public String getManagerBlogsPage() {
@@ -97,13 +102,27 @@ public class AdminController {
 
         return "adminLogin";
     }
-    
+
+    // this one works
     @PostMapping("/login")
     public String loginAdmin(Model model) {
 
+        return "redirect:/";
+    }
+
+    // this is currently not working
+    @GetMapping("/content")
+    public String viewAllPosts(HttpServletRequest request, Model model) {
+        model.addAttribute("posts", postDao.getAllPosts());
+        return "blogHome";
+    }
+
+    @PostMapping("/content")
+    public String editPost() {
         return "redirect:/admin";
     }
-    
+
+    // this one works
     @GetMapping("/add-blog")
     public String getAddBlogPage() {
 
@@ -111,8 +130,23 @@ public class AdminController {
     }
     
     @PostMapping("/add-blog")
-    public String addBlog(Post post) {
-//        post.setBody(postDao.getAddPost);
+    public String addBlog(HttpServletRequest request) {
+        String title = request.getParameter("title");
+        String headline = request.getParameter("headline");
+        final Author author = authorDao.getAuthorById(Integer.parseInt(request.getParameter("authorId")));
+
+        final List<Tag> tags = new ArrayList<>();
+
+        Post post = new Post();
+        post.setBody(post.getBody());
+        post.setAuthor(author);
+        post.setTitle(title);
+        post.setHeadline(headline);
+        post.setStatus(Status.active);
+        post.setActivationDate(post.getExpirationDate());
+        post.setCreatedAt(LocalDateTime.now());
+        post.setUpdatedAt(LocalDateTime.now());
+
 
         return "redirect:/admin";
     }
@@ -132,7 +166,7 @@ public class AdminController {
     @GetMapping("/delete-blog")
     public String deleteBlogById(int id) {
 
-        return "redirect:/admin-home";
+        return "redirect:/admin";
     }
  
 }
