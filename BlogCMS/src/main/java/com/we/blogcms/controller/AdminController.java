@@ -52,7 +52,10 @@ public class AdminController {
     BodyDao bodyDao;
 
     @GetMapping
-    public String getManagerBlogsPage() {
+    public String getManagerBlogsPage(Model model) {
+        List<Post> allPosts = postDao.getAllPostsForStatusesForAdmin(Status.active,
+                Status.inactive, Status.pending);
+        model.addAttribute("managerPosts", allPosts);
         //For marketing only add their own blogs to the controller
         //For managers add everyone's blogs to the controller
         return "adminHome";
@@ -131,21 +134,30 @@ public class AdminController {
     }
     
     @PostMapping("/add-blog")
-    public String addBlog(Post post, Body body, HttpServletRequest request) {
+    public String addBlog(Post post, HttpServletRequest request) {
         String[] tagIds = request.getParameterValues("tagIds");
-        String headline = request.getParameter("headline");
+        final Body body = new Body();
+        body.setBody(request.getParameter("bodyText"));
+        List<Tag> postTags = parsePostTags(tagIds);
         final Author author = authorDao.getAuthorById(Integer.parseInt(request.getParameter("authorId")));
-
-        final List<Tag> tags = new ArrayList<>();
-
+        post.setTags(postTags);
         post.setBody(body);
         post.setAuthor(author);
         post.setStatus(Status.active);
         post.setCreatedAt(LocalDateTime.now());
         post.setUpdatedAt(LocalDateTime.now());
 
-
+        postDao.addPost(post);
         return "redirect:/admin";
+    }
+    
+    private List<Tag> parsePostTags(String[] tagIds) {
+        List<Tag> postTags = new ArrayList<>();
+        for (String tagId: tagIds) {
+            final Tag tag = tagDao.getTagById(Integer.parseInt(tagId));
+            postTags.add(tag);
+        }
+        return postTags;
     }
     
     @GetMapping("/edit-blog")
