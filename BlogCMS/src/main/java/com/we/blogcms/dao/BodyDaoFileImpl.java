@@ -19,7 +19,7 @@ public class BodyDaoFileImpl implements BodyDao{
 
     @Override
     public Body addBody(Body body) {
-        final String INSERT_BODY = "INSERT INTO body(body) "
+        final String INSERT_BODY = "INSERT INTO body (body) "
                 + "VALUES(?)";
         jdbc.update(INSERT_BODY, body.getBody());
         int newId = jdbc.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
