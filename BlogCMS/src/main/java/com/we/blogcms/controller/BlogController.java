@@ -6,11 +6,17 @@ package com.we.blogcms.controller;
 
 import com.we.blogcms.dao.PostDao;
 import com.we.blogcms.dao.TagDao;
+import com.we.blogcms.model.Body;
 import com.we.blogcms.model.Post;
+import com.we.blogcms.model.Status;
 import com.we.blogcms.model.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import jakarta.validation.ConstraintViolation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,15 +36,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/blog")
 public class BlogController {
-//    @Autowired
-//    PostDao postDao;
-//    
-//    @Autowired
-//    TagDao tagDao;
+    Set<ConstraintViolation<Body>> violations = new HashSet<>();
+    @Autowired
+    PostDao postDao;
+
+    @Autowired
+    TagDao tagDao;
     
     @GetMapping
     public String getBlogLandingPage(@RequestParam(required = false) List<String> tagIds, Model model) {
-//        List<Post> posts;
+        List<Post> posts = postDao.getAllPostsForStatuses(Status.active);
+        List<Tag> tag = tagDao.getAllTagsForStatuses(Status.active);
+        model.addAttribute("posts", posts);
+        model.addAttribute("tag", tag);
+        //model.addAttribute("errors", violations);
+
+
+        //        List<Post> posts;
 //        if (tagIds != null) {
 //            final List<Tag> searchedTags = new ArrayList<>();
 //            for (String tagId: tagIds) {
@@ -78,7 +92,7 @@ public class BlogController {
     
     @GetMapping("/{id}")
     public String getBlogDetailPage(@PathVariable int id, Model model) {
-//        final Post post = postDao.getPostById(id);
+        final Post post = postDao.getPostById(id);
 //        model.addAttribute("post", post);
         return "blogDetail";
     }
