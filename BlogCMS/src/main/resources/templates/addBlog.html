@@ -28,9 +28,10 @@ xmlns="http://www.w3.org/1999/xhtml">
             <li class="navbar__item">
               <a href="editBlog.html" class="navbar__links">Edit</a>                
           </li>
-            <li class="navbar__btn">
+            <!--took out the link to the log in page
+          <li class="navbar__btn">
                 <a href="adminLogin.html" class="button">Log In</a>                
-            </li>
+            </li>  but it's here is you want to keep it--> 
         </ul>
     </div>
 </nav>
@@ -62,7 +63,7 @@ xmlns="http://www.w3.org/1999/xhtml">
                     </div>
                     <div class="form-group row">
                         <div class="col-12">
-                            <textarea name="content" id="full-featured-non-premium">
+                            <textarea name="body" id="full-featured-non-premium">
                             Write your awesome post here
                             </textarea>
                         </div>
@@ -101,7 +102,7 @@ xmlns="http://www.w3.org/1999/xhtml">
   </div>
 
 
-  <script>
+ <script>
     tinymce.init({
       selector: 'textarea',
       plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage tinycomments tableofcontents footnotes mergetags autocorrect',
@@ -116,5 +117,16 @@ xmlns="http://www.w3.org/1999/xhtml">
   </script>
 
 
+<!--Footer-->
+<footer>
+  <div class="footer__container">
+      <div class="footer__link">
+          <div class="footer__link--wrapper">
+  <h3 id="logoFoot">Aspire Technology</h3>
+  <p>Copyright © 2022 WE Aspire, INC</p>
+          </div>
+      </div>
+  </div>
+  </footer>
 </body>
 </html>

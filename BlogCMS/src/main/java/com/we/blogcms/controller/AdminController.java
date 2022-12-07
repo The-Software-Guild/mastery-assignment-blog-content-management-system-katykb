@@ -131,20 +131,16 @@ public class AdminController {
     }
     
     @PostMapping("/add-blog")
-    public String addBlog(HttpServletRequest request) {
-        String title = request.getParameter("title");
+    public String addBlog(Post post, Body body, HttpServletRequest request) {
+        String[] tagIds = request.getParameterValues("tagIds");
         String headline = request.getParameter("headline");
         final Author author = authorDao.getAuthorById(Integer.parseInt(request.getParameter("authorId")));
 
         final List<Tag> tags = new ArrayList<>();
 
-        Post post = new Post();
-        post.setBody(post.getBody());
+        post.setBody(body);
         post.setAuthor(author);
-        post.setTitle(title);
-        post.setHeadline(headline);
         post.setStatus(Status.active);
-        post.setActivationDate(post.getExpirationDate());
         post.setCreatedAt(LocalDateTime.now());
         post.setUpdatedAt(LocalDateTime.now());
 
