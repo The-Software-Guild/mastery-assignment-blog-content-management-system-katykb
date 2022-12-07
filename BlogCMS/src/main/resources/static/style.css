@@ -3,8 +3,9 @@
     margin: 0;
     padding: 0;
     font-family: 'Kumbh Sans', sans-serif;
-}
+    }
 
+/* navbar and links*/
 .navbar {
     background: #131313;
     height: 80px;
@@ -97,22 +98,23 @@
     transition: all 0.3s ease;
 }
 
+/*styled pages*/
 #home {
     color: #ffffff;
     width: 100%;
     height: 400px;
     background-size: cover;
-    background-image: url('images/techimage3.jpg');
+    background-image: url("/images/techimage3.jpg");
     }
-
+  
 #bloghome {
-    color: #ffffff;
-    width: 100%;
-    height: 400px;
-    background-size: cover;
-    background-image: url('images/techimage2.jpg');
-    }
-    
+  color: #fff;
+  width: 100%;
+  height: 400px;
+  background-size: cover;
+  background-image: url('images/techimage2.jpg');
+  }
+
 #adminlog {
     color: #2b3e51;
     font-size: 1.6rem;
@@ -131,6 +133,7 @@
     background-image: url('images/womenintech2.jpg');
     }
     
+    /* home page */
 .main__container {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -217,6 +220,8 @@
     text-align: center;
 }
 
+
+/* log in stuff*/
 #log {
     font-weight: 300;
     text-align: center;
@@ -240,6 +245,7 @@
     padding: 0 60px;
   }
   
+  /*create account*/
   input {
     display: block;
     box-sizing: border-box;
@@ -345,10 +351,32 @@
     border-radius: 0 0 4px 4px;
   }
 
+  /*add blog*/
   #add {
     background: linear-gradient(to top, #e994de 0%, #ac16f1 100%);
 }
 
+/* Add account button*/
+.btn__btn-primary {
+  font-size: 1rem;
+   background: rgb(100, 33, 163);
+   padding: 14px 32px;
+   border: none;
+   border-radius: 4px;
+   color: #ffffff;
+   margin-top: 2rem;
+   cursor: pointer;
+   position: relative;
+   transition: all 0.35s;
+   outline: none;
+}
+
+.btn__btn-primary:hover {
+   background: rgb(72, 14, 233);
+   transition: all 0.3s ease;
+}
+
+/* Footer */
 #logoFoot {
     background-image: linear-gradient(to top, rgb(183, 29, 230) 0%, rgb(82, 26, 235) 100%);
     background-size: 100%;
@@ -382,6 +410,7 @@
     position: sticky;
     z-index: 999;
     padding-bottom: 0px;
+    color: #fff;
 }
 
 .footer__container1 {
@@ -394,6 +423,5 @@
     position: sticky;
     z-index: 999;
     padding-bottom: 0px;
+    color: #fff;
 }
-
-
