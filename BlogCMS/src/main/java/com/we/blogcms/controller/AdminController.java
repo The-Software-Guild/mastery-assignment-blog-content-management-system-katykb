@@ -124,8 +124,9 @@ public class AdminController {
 
     // this one works
     @GetMapping("/add-blog")
-    public String getAddBlogPage() {
-
+    public String getAddBlogPage(Model model) {
+        final List<Tag> allTags = tagDao.getAllTagsForStatuses(Status.active);
+        model.addAttribute("tags", allTags);
         return "addBlog";
     }
     
