@@ -124,26 +124,23 @@ public class AdminController {
 
     // this one works
     @GetMapping("/add-blog")
-    public String getAddBlogPage() {
-
+    public String getAddBlogPage(Model model) {
+        final List<Tag> allTags = tagDao.getAllTagsForStatuses(Status.active);
+        model.addAttribute("tags", allTags);
         return "addBlog";
     }
     
     @PostMapping("/add-blog")
-    public String addBlog(HttpServletRequest request) {
-        String title = request.getParameter("title");
+    public String addBlog(Post post, Body body, HttpServletRequest request) {
+        String[] tagIds = request.getParameterValues("tagIds");
         String headline = request.getParameter("headline");
         final Author author = authorDao.getAuthorById(Integer.parseInt(request.getParameter("authorId")));
 
         final List<Tag> tags = new ArrayList<>();
 
-        Post post = new Post();
-        post.setBody(post.getBody());
+        post.setBody(body);
         post.setAuthor(author);
-        post.setTitle(title);
-        post.setHeadline(headline);
         post.setStatus(Status.active);
-        post.setActivationDate(post.getExpirationDate());
         post.setCreatedAt(LocalDateTime.now());
         post.setUpdatedAt(LocalDateTime.now());
 
