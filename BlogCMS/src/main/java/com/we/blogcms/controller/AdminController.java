@@ -4,9 +4,12 @@
  */
 package com.we.blogcms.controller;
 
+import ch.qos.logback.classic.pattern.ClassOfCallerConverter;
 import com.we.blogcms.dao.AuthorDao;
 import com.we.blogcms.model.Author;
 import com.we.blogcms.model.Post;
+import com.we.blogcms.model.Role;
+import com.we.blogcms.model.Status;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -42,19 +46,20 @@ public class AdminController {
 
 //    @Autowired
 
-//    @GetMapping
-//    public String getManagerBlogsPage(Model model) {
-//        //For marketing only add their own blogs to the controller
-//        //For managers add everyone's blogs to the controller
-//        return "adminHome";
-//    }
+    @GetMapping
+    public String getManagerBlogsPage() {
+        //For marketing only add their own blogs to the controller
+        //For managers add everyone's blogs to the controller
+        return "adminHome";
+    }
     
     @PostMapping
     public String searchForAdminBlogsWithTags() {
         String requestUrl = "redirect:/adminHome";
         return requestUrl;
     }
-    
+
+    // this one works
     @GetMapping("/signup")
     public String getCreateAccountPage(Model model) {
 
@@ -62,9 +67,20 @@ public class AdminController {
     }
     
     @PostMapping("/signup")
-    public String createAccount(Author author, Model model) {
-
-        model.addAttribute("author", author);
+    public String createAccount(HttpServletRequest request) {
+        String firstName = request.getParameter("firstName");
+        String lastName = request.getParameter("lastName");
+        String email = request.getParameter("email");
+        String pwd = request.getParameter("password");
+        Author author = new Author();
+        author.setStatus(Status.active);
+        author.setRole(Role.marketing);
+        author.setFirstName(firstName);
+        author.setLastName(lastName);
+        author.setEmail(email);
+        author.setPassword(pwd);
+        author.setCreatedAt(LocalDateTime.now());
+        author.setUpdatedAt(LocalDateTime.now());
 
         Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
         violations = validate.validate(author);
@@ -72,9 +88,10 @@ public class AdminController {
         if (violations.isEmpty()) {
             authorDao.addAuthor(author);
         }
-        return "redirect:/adminHome";
+        return "redirect:/admin/login";
     }
-    
+
+    // this one works
     @GetMapping("/login")
     public String getAdminLoginPage() {
 
@@ -82,9 +99,9 @@ public class AdminController {
     }
     
     @PostMapping("/login")
-    public String loginAdmin() {
-// code
-        return "redirect:/adminHome";
+    public String loginAdmin(Model model) {
+
+        return "redirect:/admin";
     }
     
     @GetMapping("/add-blog")
@@ -97,21 +114,24 @@ public class AdminController {
     public String addBlog(Post post) {
 //        post.setBody(postDao.getAddPost);
 
-        return "redirect:/adminHome";
+        return "redirect:/admin";
     }
     
     @GetMapping("/edit-blog")
     public String getEditBlogPage(int id) {
+
         return "editBlog";
     }
     
     @PostMapping("/edit-blog")
     public String editBlog() {
-        return "redirect:/adminHome";
+
+        return "redirect:/admin";
     }
     
     @GetMapping("/delete-blog")
     public String deleteBlogById(int id) {
+
         return "redirect:/admin-home";
     }
  
