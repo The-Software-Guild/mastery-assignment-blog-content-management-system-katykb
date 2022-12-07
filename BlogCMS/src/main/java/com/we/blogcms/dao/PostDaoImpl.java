@@ -3,7 +3,9 @@ package com.we.blogcms.dao;
 import com.we.blogcms.model.Post;
 import com.we.blogcms.model.Status;
 import com.we.blogcms.model.Tag;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -26,7 +28,11 @@ public class PostDaoImpl implements PostDao{
     DaoHelper daoHelper;
     @Autowired
     BodyDao bodyDao;
+
     @Autowired
+    public PostDaoImpl(@Lazy AuthorDao authorDao) {
+        this.authorDao = authorDao;
+    }
     AuthorDao authorDao;
     @Autowired
     TagDao tagDao;
@@ -34,7 +40,7 @@ public class PostDaoImpl implements PostDao{
     @Override
     @Transactional
     public Post addPost(Post post) {
-        final String INSERT_POST = "INSERT INTO post (status, activationDate, expirationDate, title, headline)"
+        final String INSERT_POST = "INSERT INTO post (status, activationDate, expirationDate, title, headline )"
                 + " VALUES (" + daoHelper.SINGLE_QUOTE + post.getStatus() + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
                 + daoHelper.SINGLE_QUOTE + Timestamp.valueOf(post.getActivationDate()) + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
                 + daoHelper.SINGLE_QUOTE + Timestamp.valueOf(post.getExpirationDate()) + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER

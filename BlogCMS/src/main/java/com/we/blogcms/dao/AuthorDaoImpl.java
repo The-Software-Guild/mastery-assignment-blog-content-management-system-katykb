@@ -1,6 +1,7 @@
 package com.we.blogcms.dao;
 
 import com.we.blogcms.model.Author;
+import com.we.blogcms.model.Post;
 import com.we.blogcms.model.Role;
 import com.we.blogcms.model.Status;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,20 +18,20 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository
-public class AuthorDaoImpl implements AuthorDao{
+public class AuthorDaoImpl implements AuthorDao {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-//    @Autowired
-//    PostDao postDao;
+    @Autowired
+    PostDao postDao;
 
     @Override
     @Transactional
     public Author addAuthor(Author author) {
         final String INSERT_AUTHOR =
                 "INSERT INTO author(status, firstName, lastName, role, displayName, email, password, createdAt, updatedAt)"
-                + " VALUES(?,?,?,?,?,?,?,?,?)";
+                        + " VALUES(?,?,?,?,?,?,?,?,?)";
         jdbcTemplate.update(INSERT_AUTHOR,
                 author.getStatus().toString(),
                 author.getFirstName(),
@@ -65,40 +66,52 @@ public class AuthorDaoImpl implements AuthorDao{
     @Override
     @Transactional
     public Author getAuthorById(int authorId) {
-        try{
+        try {
             final String SELECT_AUTHOR_BY_ID = "SELECT * FROM author WHERE authorId = ?";
             Author author = jdbcTemplate.queryForObject(SELECT_AUTHOR_BY_ID, new AuthorMapper(), authorId);
             return author;
-        }catch (DataAccessException ex){
+        } catch (DataAccessException ex) {
             return null;
         }
     }
 
     @Override
     public Author getPostAuthor(int postId) {
-//       final String SELECT_POST_FOR_AUTHOR = "SELECT p.* FROM postauthor p WHERE authorId = ?";
-//       jdbcTemplate.query(SELECT_POST_FOR_AUTHOR, new postDao.PostMapper(), postId);
-        return null;
+        final String SELECT_POST_AUTHOR = "SELECT a.* FROM author a " +
+                "JOIN postauthor pa ON a.authorId = pa.authorId WHERE postId = ?";
+        final Author postAuthor = jdbcTemplate.queryForObject(SELECT_POST_AUTHOR, new AuthorMapper(), postId);
+        return postAuthor;
     }
 
     @Override
     @Transactional
     public void deleteAuthor(Author author) {
+        deleteAuthorPosts(author);
         final String DELETE_AUTHOR = "DELETE FROM author WHERE authorId = ?";
         jdbcTemplate.update(DELETE_AUTHOR, author.getAuthorId());
+    }
 
-        //TODO: add post delete part after pr for post dao
-
+    private void deleteAuthorPosts(Author author) {
+        final List<Post> allPostsForAuthor = postDao.getPostsForAuthor(
+                author.getAuthorId(), Status.active,
+                Status.deleted,
+                Status.inactive,
+                Status.pending);
+        for (Post post : allPostsForAuthor) {
+            postDao.deletePost(post);
+        }
     }
 
     @Override
     @Transactional
     public void deactivateAuthor(Author author) {
-        final String DEACTIVATE_AUTHOR = "UPDATE author SET status = ' " +
-                Status.deleted.toString() + " ' WHERE authorId = ?";
-        jdbcTemplate.update(DEACTIVATE_AUTHOR, author.getAuthorId());
-        //TODO add deactivate author post method
+        final String DEACTIVE_AUTHOR = "UPDATE author SET status = '" +
+                Status.deleted +
+                "WHERE authorId = ?";
+        jdbcTemplate.update(DEACTIVE_AUTHOR, author.getAuthorId());
+        deleteAuthorPosts(author);
     }
+
 
     @Override
     public void updateAuthor(Author author) {
@@ -120,23 +133,22 @@ public class AuthorDaoImpl implements AuthorDao{
                 author.getAuthorId());
     }
 
-    private static final class AuthorMapper implements RowMapper<Author> {
+private static final class AuthorMapper implements RowMapper<Author> {
 
-        @Override
-        public Author mapRow(ResultSet rs, int index) throws SQLException {
-            Author author = new Author();
-            author.setAuthorId(rs.getInt("authorId"));
-            author.setStatus(Status.valueOf(rs.getString("status")));
-            author.setFirstName(rs.getString("firstName"));
-            author.setLastName(rs.getString("lastName"));
-            author.setDisplayName(rs.getString("displayName"));
-            author.setRole(Role.valueOf(rs.getString("role")));
-            author.setEmail(rs.getString("email"));
-            author.setPassword(rs.getString("password"));
-            author.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
-            author.setUpdatedAt(rs.getTimestamp("updatedAt").toLocalDateTime());
-            return author;
-        }
-
+    @Override
+    public Author mapRow(ResultSet rs, int index) throws SQLException {
+        Author author = new Author();
+        author.setAuthorId(rs.getInt("authorId"));
+        author.setStatus(Status.valueOf(rs.getString("status")));
+        author.setFirstName(rs.getString("firstName"));
+        author.setLastName(rs.getString("lastName"));
+        author.setDisplayName(rs.getString("displayName"));
+        author.setRole(Role.valueOf(rs.getString("role")));
+        author.setEmail(rs.getString("email"));
+        author.setPassword(rs.getString("password"));
+        author.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
+        author.setUpdatedAt(rs.getTimestamp("updatedAt").toLocalDateTime());
+        return author;
     }
+}
 }
