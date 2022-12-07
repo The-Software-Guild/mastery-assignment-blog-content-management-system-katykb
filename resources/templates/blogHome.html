@@ -41,96 +41,20 @@
                 </header>
             </div>
         <section class="d-flex flex-row flex-sm-wrap justify-content-center">
-            <div class="card w-25  m-1">
-                 <img class="card-img-top" th:src="@{images/blog-default-img.png}" alt="Card image caption">
-                     <div class="card-body">
-                         <h5 class="card-title">Card Title</h5>
-                         <p class="card-text">An example of where the headline will go</p>
-                         <a href="#" class="btn btn-primary">Go to the blog</a>
-                     </div>
-            </div>
-            <div class="card w-25 m-1">
-                 <img class="card-img-top" th:src="@{images/blog-default-img.png}" alt="Card image caption">
-                     <div class="card-body">
-                         <h5 class="card-title">Card Title</h5>
-                         <p class="card-text">An example of where the headline will go</p>
-                         <a href="#" class="btn btn-primary">Go to the blog</a>
-                     </div>
-            </div>
-            <div class="card w-25 m-1">
-                 <img class="card-img-top" th:src="@{images/blog-default-img.png}" alt="Card image caption">
-                     <div class="card-body">
-                         <h5 class="card-title">Card Title</h5>
-                         <p class="card-text">An example of where the headline will go</p>
-                         <a href="#" class="btn btn-primary">Go to the blog</a>
-                     </div>
-            </div>
-            <div class="card w-25 m-1">
-                 <img class="card-img-top" th:src="@{images/blog-default-img.png}" alt="Card image caption">
-                     <div class="card-body">
-                         <h5 class="card-title">Card Title</h5>
-                         <p class="card-text">An example of where the headline will go</p>
-                         <a href="#" class="btn btn-primary">Go to the blog</a>
-                     </div>
-            </div>
-            <div class="card w-25 m-1">
-                 <img class="card-img-top" th:src="@{images/blog-default-img.png}" alt="Card image caption">
-                     <div class="card-body">
-                         <h5 class="card-title">Card Title</h5>
-                         <p class="card-text">An example of where the headline will go</p>
-                         <a href="#" class="btn btn-primary">Go to the blog</a>
-                     </div>
-            </div>
-            <div class="card w-25 m-1">
-                 <img class="card-img-top" th:src="@{images/blog-default-img.png}" alt="Card image caption">
-                     <div class="card-body">
-                         <h5 class="card-title">Card Title</h5>
-                         <p class="card-text">An example of where the headline will go</p>
-                         <a href="#" class="btn btn-primary">Go to the blog</a>
-                     </div>
-            </div>
-            <div class="card w-25 m-1">
-                 <img class="card-img-top" th:src="@{images/blog-default-img.png}" alt="Card image caption">
-                     <div class="card-body">
-                         <h5 class="card-title">Card Title</h5>
-                         <p class="card-text">An example of where the headline will go</p>
-                         <a href="#" class="btn btn-primary">Go to the blog</a>
-                     </div>
-            </div>
-            <div class="card w-25 m-1">
-                 <img class="card-img-top" th:src="@{images/blog-default-img.png}" alt="Card image caption">
-                     <div class="card-body">
-                         <h5 class="card-title">Card Title</h5>
-                         <p class="card-text">An example of where the headline will go</p>
-                         <a href="#" class="btn btn-primary">Go to the blog</a>
-                     </div>
-            </div>
-            <div class="card w-25 m-1">
-                 <img class="card-img-top" th:src="@{images/blog-default-img.png}" alt="Card image caption">
-                     <div class="card-body">
-                         <h5 class="card-title">Card Title</h5>
-                         <p class="card-text">An example of where the headline will go</p>
-                         <a href="#" class="btn btn-primary">Go to the blog</a>
-                     </div>
-            </div>
-            <div class="card w-25 m-1">
-                 <img class="card-img-top" th:src="@{images/blog-default-img.png}" alt="Card image caption">
-                     <div class="card-body">
-                         <h5 class="card-title">Card Title</h5>
-                         <p class="card-text">An example of where the headline will go</p>
-                         <a href="#" class="btn btn-primary">Go to the blog</a>
-                     </div>
-            </div>
-            <div class="card w-25 m-1">
-                 <img class="card-img-top" th:src="@{images/blog-default-img.png}" alt="Card image caption">
-                     <div class="card-body">
-                         <h5 class="card-title">Card Title</h5>
-                         <p class="card-text">An example of where the headline will go</p>
-                         <a href="#" class="btn btn-primary">Go to the blog</a>
-                     </div>
-            </div>
+
+
+                <div class="card w-25 m-1"th:each="post : ${posts}">
+                    <img class="card-img-top" th:src="@{images/blog-default-img.png}" alt="Card image caption">
+                    <div class="card-body" >
+                        <h5 class="card-title" th:text="${post.title}"></h5>
+                        <h3 class="card-title" th:text="${post.author}"></h3>
+                        <p class="card-text" th:text ="${post.body}"></p>
+                        <a href="#" class="btn btn-primary">Go to the blog</a>
+                    </div>
+                </div>
+
         </section>
-            
+
     </main>
  <!-- footer -->
  
