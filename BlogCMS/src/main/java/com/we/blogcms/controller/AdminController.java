@@ -109,9 +109,9 @@ public class AdminController {
 
     // this one works
     @PostMapping("/login")
-    public String loginAdmin(Model model) {
-
-        return "redirect:/";
+    public String loginAdmin(Author author, Model model) {
+        model.addAttribute("author", author);
+        return "redirect:/admin";
     }
 
     // this is currently not working
@@ -152,7 +152,12 @@ public class AdminController {
         return "redirect:/admin";
     }
     
-    
+    @GetMapping("/tags")
+    public String getManageTagsPage(Model model) {
+        final List<Tag> allTags = tagDao.getAllTagsForStatuses(Status.active);
+        model.addAttribute("tags", allTags);
+        return "manageTags";
+    }
     
     @GetMapping("/edit-blog")
     public String getEditBlogPage(int id, Model model) {
