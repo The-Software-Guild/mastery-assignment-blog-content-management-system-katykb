@@ -171,7 +171,10 @@ public class AdminController {
         String[] tagIds = request.getParameterValues("tagIds");
         final Body body = bodyDao.getBodyById(Integer.parseInt(request.getParameter("bodyId")));
         body.setBody(request.getParameter("bodyText"));
-        List<Tag> postTags = parsePostTags(tagIds);
+        List<Tag> postTags = null;
+        if (tagIds != null && tagIds.length > 0) {
+            postTags = parsePostTags(tagIds);
+        }
         final Author author = authorDao.getAuthorById(Integer.parseInt(request.getParameter("authorId")));
         post.setTags(postTags);
         post.setBody(body);

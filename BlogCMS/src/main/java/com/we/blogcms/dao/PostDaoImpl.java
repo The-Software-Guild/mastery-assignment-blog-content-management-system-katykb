@@ -100,6 +100,8 @@ public class PostDaoImpl implements PostDao{
             final List<Tag> tagsToAdd = getTagsToAdd(post.getTags(),
                     existingPostTags);
             addNewPostTags(tagsToAdd, post.getPostId());
+        } else {
+            removedNeededPostTags(post);
         }
     }
 
@@ -116,8 +118,13 @@ public class PostDaoImpl implements PostDao{
     }
 
     private void removedNeededPostTags(Post post) {
-        final String UPDATE_POST_TAGS = "DELETE FROM posttag pt WHERE pt.postId = ? AND pt.tagId NOT IN " +
+        String UPDATE_POST_TAGS = "";
+        if (post.getTags() != null) {
+           UPDATE_POST_TAGS = "DELETE FROM posttag pt WHERE pt.postId = ? AND pt.tagId NOT IN " +
                 createInTagIdText(post.getTags());
+        } else {
+            UPDATE_POST_TAGS = "DELETE FROM posttag pt WHERE pt.postId = ?";
+        }
         jdbc.update(UPDATE_POST_TAGS, post.getPostId());
     }
     private void addPostBody(int bodyId, int postId) {
