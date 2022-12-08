@@ -38,38 +38,24 @@ xmlns="http://www.w3.org/1999/xhtml">
 </nav>
 <main class="container ">
         <header class="col text-center border border-light">
-            <h1><a href="/" class="text-purple-gradient">Manage Blog Posts</a></h1>
+            <h1><a href="/" class="text-purple-gradient">Manage Tags</a></h1>
         </header>
     <section class="d-flex flex-column flex-sm-wrap justify-content-center text-center">
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">Author</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Headline</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Activation Date</th>
-                        <th scope="col">Expiration Date</th>
+                        <th scope="col">Tag</th>
                         <th scope="col">Creation Date</th>
-                        <th scope="col">Last Updated</th>
-                        <th scope="col">Edit</th>
-                        <th scope="col">Delete</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="post : ${managerPosts}">
-                        <td scope="row" th:text="${post.postId}">Post ID</td>
-                        <td th:text="|${post.author.lastName}, ${post.author.firstName}|">Author Name</td>
-                        <td th:text="${post.title}">Post Title</td>
-                        <td th:text="${post.headline}">Post Headline</td>
-                        <td th:text="${post.status.toString()}">Status</td>
--->                     <td th:text="${post.activationDate != null} ? ${post.activationDate} : 'N/A'">Activation Date</td>
-                        <td th:text="${post.expirationDate != null} ? ${post.expirationDate} : 'N/A'">Expiration Date</td>
-                        <td th:text="${post.createdAt}">Creation Date</td>
-                        <td th:text="${post.updatedAt}">Last Updated</td>
-                        <td><a href="#" th:href="@{/admin/edit-blog(id=${post.postId})}">Edit</a></td>
-                        <td><a href="#" th:href="@{/admin/delete-blog(id=${post.postId})}">Delete</a></td>
+                    <tr th:each="tag : ${tags}">
+                        <td scope="row" th:text="${tag.tagId}">Tag ID</td>
+                        <td th:text="${tag.tag}">Tag Name</td>
+                        <td th:text="${tag.createdAt}">Tag Creation Date</td>
+                        <td><a href="#" th:href="@{/admin/edit-tag(id=${tag.tagId})}">Edit</a></td>
+                        <td><a href="#" th:href="@{/admin/delete-tag(id=${tag.tagId})}">Delete</a></td>
                     </tr>
                 </tbody>
             </table>
