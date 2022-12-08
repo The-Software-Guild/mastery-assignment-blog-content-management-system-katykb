@@ -37,13 +37,29 @@
 <main class="container">
     <div class="row m-4">
         <header class="col text-center border border-light">
-            <h1><a href="/" class="text-light">Our Blogs</a></h1>
+            <h1><a href="/" class="text-purple-gradient">Our Blogs</a></h1>
         </header>
     </div>
-    <section class="d-flex flex-row flex-sm-wrap justify-content-center">
-
-
-        <div class="card w-25 m-1"th:each="post : ${posts}">
+    <section>
+    <form action="/blog" method="POST">
+        <div class="form-group row d-flex flex-column flex-sm-wrap justify-content-center align-items-center">
+                <label for="tagIds" class="col-3 col-form-label text-purple-gradient text-center medium-text">
+                    
+                    Select blog topics</label>
+                <div class="col-9">
+                    <select multiple  id="tagIds" name="tagIds" class="form-control" >
+                        <option th:each="tag : ${tags}" 
+                                th:value="${tag.tagId}" 
+                                th:text="${tag.tag}" class="btn">
+                            Tag Description</option>
+                    </select>
+                </div>
+            <button type="submit" class="main__btn w-25" >Filter Blogs</button>
+        </div>
+            
+    </form>
+    <div class="d-flex flex-row flex-sm-wrap justify-content-center">
+        <div class="card w-25 m-1 mb-3"th:each="post : ${posts}">
             <img class="card-img-top" th:src="@{images/blog-default-img.png}" alt="Card image caption">
             <div class="card-body" >
                 <h5 class="card-title" th:text="${post.title}"></h5>
@@ -60,7 +76,7 @@
                 <a href="#" th:href="|/blog/${post.postId}|" class="btn btn-primary mt-3">View Blog</a>
             </div>
         </div>
-
+    </div>
     </section>
 
 </main>
