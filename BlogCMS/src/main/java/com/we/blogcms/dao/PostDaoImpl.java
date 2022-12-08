@@ -282,6 +282,7 @@ public class PostDaoImpl implements PostDao{
     @Transactional
     public void updatePost(Post post) {
         updatePostTags(post);
+        bodyDao.updateBody(post.getBody());
         //UPDATED
         // WEHRE added postId = 0
         //getStatus.toString()
