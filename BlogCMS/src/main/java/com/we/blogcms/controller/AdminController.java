@@ -115,16 +115,12 @@ public class AdminController {
     }
 
     // this is currently not working
-    @GetMapping("/content")
-    public String viewAllPosts(HttpServletRequest request, Model model) {
-        model.addAttribute("posts", postDao.getAllPosts());
-        return "blogHome";
-    }
+//    @GetMapping("/content")
+//    public String viewAllPosts(HttpServletRequest request, Model model) {
+//        model.addAttribute("posts", postDao.getAllPosts());
+//        return "blogHome";
+//    }
 
-    @PostMapping("/content")
-    public String editPost() {
-        return "redirect:/admin";
-    }
 
     // this one works
     @GetMapping("/add-blog")
@@ -150,13 +146,6 @@ public class AdminController {
 
         postDao.addPost(post);
         return "redirect:/admin";
-    }
-    
-    @GetMapping("/tags")
-    public String getManageTagsPage(Model model) {
-        final List<Tag> allTags = tagDao.getAllTagsForStatuses(Status.active);
-        model.addAttribute("tags", allTags);
-        return "manageTags";
     }
     
     @GetMapping("/edit-blog")
@@ -222,5 +211,27 @@ public class AdminController {
                 .collect(Collectors.toList());
         return tagIdList;
     }
+
+
+    @GetMapping("/tags")
+    public String getManageTagsPage(Model model) {
+        final List<Tag> allTags = tagDao.getAllTagsForStatuses(Status.active);
+        model.addAttribute("tags", allTags);
+        return "manageTags";
+    }
+
+    @PostMapping("/edit-tag")
+    public  String editTag(){
+        return null;
+    }
+
+    @GetMapping("/delete-tag")
+    public String deleteTagById(Integer id) {
+        tagDao.deleteTagById(id);
+        return "redirect:/admin";
+    }
+
+
+
  
 }

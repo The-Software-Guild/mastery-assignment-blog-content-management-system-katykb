@@ -7,6 +7,8 @@ package com.we.blogcms.dao;
 import com.we.blogcms.model.Author;
 import com.we.blogcms.model.Status;
 import com.we.blogcms.model.Tag;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 /**
@@ -62,5 +64,10 @@ public interface TagDao {
      * database, null if no tag was deleted
      */
     public void deleteTagById(int tagId);
+
+    @Transactional
+    void updateTag(Tag tag);
     //Don't need edit tag method
+
+
 }
