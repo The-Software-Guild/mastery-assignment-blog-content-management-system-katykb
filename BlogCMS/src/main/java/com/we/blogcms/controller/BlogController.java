@@ -45,27 +45,22 @@ public class BlogController {
     
     @GetMapping
     public String getBlogLandingPage(@RequestParam(required = false) List<String> tagIds, Model model) {
-        List<Post> posts = postDao.getAllPostsForStatuses(Status.active);
-        List<Tag> tag = tagDao.getAllTagsForStatuses(Status.active);
+        List<Post> posts;
+        if (tagIds != null) {
+            final List<Tag> searchedTags = new ArrayList<>();
+            for (String tagId: tagIds) {
+                final Tag postTag = tagDao.getTagById(Integer.parseInt(tagId));
+                searchedTags.add(postTag);
+            }
+            
+            posts = postDao.getPostsForStatusesByTags(searchedTags, Status.active);
+        } else {
+            posts = postDao.getAllPostsForStatuses(Status.active);
+        }
+        List<Tag> tags = tagDao.getAllTagsForStatuses(Status.active);
         model.addAttribute("posts", posts);
-        model.addAttribute("tag", tag);
-        //model.addAttribute("errors", violations);
-
-
-        //        List<Post> posts;
-//        if (tagIds != null) {
-//            final List<Tag> searchedTags = new ArrayList<>();
-//            for (String tagId: tagIds) {
-//                final Tag postTag = tagDao.getTagById(Integer.parseInt(tagId));
-//                searchedTags.add(postTag);
-//            }
-//            
-//            posts = postDao.getShowablePostsByTags(searchedTags);
-//        } else {
-//            posts = postDao.getShowablePosts();
-//        }
-//        
-//        model.addAttribute("posts", posts);
+        model.addAttribute("tags", tags);
+        model.addAttribute("posts", posts);
         return "blogHome";
     }
 
@@ -73,10 +68,15 @@ public class BlogController {
     public String makeBlogSearch(HttpServletRequest request) {
         final String[] tagIds = request.getParameterValues("tagIds");
         String requestUrl = "redirect:/blog";
+        if (tagIds == null) return requestUrl;
         for (int index = 0; index < tagIds.length; index += 1) {
             final String currentTagId = tagIds[index], DELIMITER = ",";
             final int FIRST_INDEX = 0;
             final int LAST_INDEX = tagIds.length - 1;
+            if (index == LAST_INDEX && FIRST_INDEX == LAST_INDEX) {
+                requestUrl += "?tagIds=" + currentTagId;
+                break;
+            }
             if (index == FIRST_INDEX) {
                 requestUrl += "?tagIds=" + currentTagId + DELIMITER;
                 continue;
@@ -93,7 +93,7 @@ public class BlogController {
     @GetMapping("/{id}")
     public String getBlogDetailPage(@PathVariable int id, Model model) {
         final Post post = postDao.getPostById(id);
-//        model.addAttribute("post", post);
+        model.addAttribute("post", post);
         return "blogDetail";
     }
     

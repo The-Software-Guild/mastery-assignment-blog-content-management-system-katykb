@@ -47,8 +47,11 @@ public class BodyDaoFileImpl implements BodyDao{
 
     @Override
     public Body getPostBody(int postId) {
-
-        return null;
+        final String GET_POST_BODY_SQL = "SELECT b.* FROM body b INNER JOIN "
+                + "postbody pb ON b.bodyId = pb.bodyId WHERE "
+                + "pb.postId = ?;";
+        final Body postBody = jdbc.queryForObject(GET_POST_BODY_SQL, new BodyMapper(), postId);
+        return postBody;
     }
 
     @Override

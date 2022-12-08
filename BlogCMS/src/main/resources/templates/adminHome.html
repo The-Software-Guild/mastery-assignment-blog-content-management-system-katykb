@@ -64,8 +64,8 @@ xmlns="http://www.w3.org/1999/xhtml">
                         <td th:text="${post.expirationDate != null} ? ${post.expirationDate} : 'N/A'">Expiration Date</td>
                         <td th:text="${post.createdAt}">Creation Date</td>
                         <td th:text="${post.updatedAt}">Last Updated</td>
-                        <td><a href="#" th:href="@{/admin/edit(id=${post.postId})}">Edit</a></td>
-                        <td><a href="#" th:href="@{/admin/delete(id=${post.postId})}">Delete</a></td>
+                        <td><a href="#" th:href="@{/admin/edit-blog(id=${post.postId})}">Edit</a></td>
+                        <td><a href="#" th:href="@{/admin/delete-blog(id=${post.postId})}">Delete</a></td>
                     </tr>
                 </tbody>
             </table>

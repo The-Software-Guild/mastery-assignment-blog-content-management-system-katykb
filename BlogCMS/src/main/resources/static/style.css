@@ -147,7 +147,7 @@
     padding: 0 50px;
 }
 
-.main__content h1 {
+.main__content h1, .text-purple-gradient {
     font-size:  4rem;
     background-color: #7785ff;
     background-image: linear-gradient(to bottom, rgb(183, 29, 230) 0%, rgb(82, 26, 235) 100%);
@@ -424,4 +424,8 @@
     z-index: 999;
     padding-bottom: 0px;
     color: #fff;
+}
+
+.medium-text {
+    font-size: 1.3rem !important;
 }

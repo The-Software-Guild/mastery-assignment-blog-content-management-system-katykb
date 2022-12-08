@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.PatternSyntaxException;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -151,6 +152,56 @@ public class AdminController {
         return "redirect:/admin";
     }
     
+    
+    
+    @GetMapping("/edit-blog")
+    public String getEditBlogPage(int id, Model model) {
+        final Post post = postDao.getPostById(id);
+        final List<Tag> tags = tagDao.getAllTagsForStatuses(Status.active);
+        final List<Integer> tagIds = returnPostTagIdList(post);
+        model.addAttribute("postTagIds", tagIds);
+        model.addAttribute("tags", tags);
+        model.addAttribute("post", post);
+        return "editBlog";
+    }
+    
+    @PostMapping("/edit-blog")
+    public String editBlog(Post post, HttpServletRequest request) {
+        final Post existingPost = postDao.getPostById(post.getPostId());
+        String[] tagIds = request.getParameterValues("tagIds");
+        final Body body = bodyDao.getBodyById(Integer.parseInt(request.getParameter("bodyId")));
+        body.setBody(request.getParameter("bodyText"));
+        List<Tag> postTags = null;
+        if (tagIds != null && tagIds.length > 0) {
+            postTags = parsePostTags(tagIds);
+        }
+        final Author author = authorDao.getAuthorById(Integer.parseInt(request.getParameter("authorId")));
+        post.setTags(postTags);
+        post.setBody(body);
+        post.setAuthor(author);
+        post.setCreatedAt(existingPost.getCreatedAt());
+        post.setUpdatedAt(LocalDateTime.now());
+        if (post.getStatus() == null) {
+            post.setStatus(existingPost.getStatus());
+        }
+        if (post.getActivationDate() == null) {
+            post.setActivationDate(existingPost.getActivationDate());
+        }
+        if (post.getExpirationDate() == null) {
+            post.setExpirationDate(existingPost.getExpirationDate());
+        }
+        postDao.updatePost(post);
+        return "redirect:/admin";
+    }
+    
+    @GetMapping("/delete-blog")
+    public String deleteBlogById(int id) {
+        final Post postToDelete = postDao.getPostById(id);
+        postToDelete.setStatus(Status.deleted);
+        postDao.updatePost(postToDelete);
+        return "redirect:/admin";
+    }
+    
     private List<Tag> parsePostTags(String[] tagIds) {
         List<Tag> postTags = new ArrayList<>();
         for (String tagId: tagIds) {
@@ -160,22 +211,11 @@ public class AdminController {
         return postTags;
     }
     
-    @GetMapping("/edit-blog")
-    public String getEditBlogPage(int id) {
-
-        return "editBlog";
-    }
-    
-    @PostMapping("/edit-blog")
-    public String editBlog() {
-
-        return "redirect:/admin";
-    }
-    
-    @GetMapping("/delete-blog")
-    public String deleteBlogById(int id) {
-
-        return "redirect:/admin";
+    private List<Integer> returnPostTagIdList(Post post) {
+        List<Integer> tagIdList = post.getTags().stream().
+                        map(tag -> tag.getTagId())
+                .collect(Collectors.toList());
+        return tagIdList;
     }
  
 }
