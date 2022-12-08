@@ -93,7 +93,7 @@ public class BlogController {
     @GetMapping("/{id}")
     public String getBlogDetailPage(@PathVariable int id, Model model) {
         final Post post = postDao.getPostById(id);
-//        model.addAttribute("post", post);
+        model.addAttribute("post", post);
         return "blogDetail";
     }
     

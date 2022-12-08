@@ -8,6 +8,9 @@ xmlns="http://www.w3.org/1999/xhtml">
     <title>Aspire Tech Blog</title>
     <link rel="stylesheet" href="../style.css">
   <script src="https://cdn.tiny.cloud/1/h1d1riyg3d8zt7dc0quz6m7tcpzve33fpqshpk5g6txn8i4h/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+  <script src="https://kit.fontawesome.com/2849efec07.js" crossorigin="anonymous"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 <body id="add">
   <nav class="navbar">
@@ -71,7 +74,7 @@ xmlns="http://www.w3.org/1999/xhtml">
                                 Post tags</label>
                             <div class="col-9">
                                 
-                                <select multiple id="tagIds" name="tagIds" class="form-control" >
+                                <select multiple  id="tagIds" name="tagIds" class="form-control" >
                                     <option th:each="tag : ${tags}" 
                                             th:value="${tag.tagId}" 
                                             th:text="${tag.tag}">
@@ -126,5 +129,8 @@ xmlns="http://www.w3.org/1999/xhtml">
       </div>
   </div>
   </footer>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </body>
 </html>
