@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
+import jakarta.validation.constraints.PastOrPresent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.quartz.QuartzTransactionManager;
 import org.springframework.stereotype.Controller;
@@ -213,25 +214,50 @@ public class AdminController {
     }
 
 
+    @GetMapping("/add-tag")
+    public String getAddTagPage() {
+        return "redirect:/admin/tags";
+    }
+
+
+    @PostMapping("/add-tag")
+    public String createNewTag(Tag tag) {
+
+        tagDao.addTag(tag);
+
+        return "redirect:/admin/tags";
+
+    }
+
     @GetMapping("/tags")
-    public String getManageTagsPage(Model model) {
+    public String getManageTagsPage(Model model, @RequestParam(required = false) Integer id) {
+        Tag tag = null;
+        if (id != null) {
+            tag = tagDao.getTagById(id);
+        }
+
         final List<Tag> allTags = tagDao.getAllTagsForStatuses(Status.active);
         model.addAttribute("tags", allTags);
+        model.addAttribute("tag", tag);
         return "manageTags";
     }
 
     @PostMapping("/edit-tag")
-    public  String editTag(){
-        return null;
+    public  String editTag(Tag tag){
+        final Tag oldTag = tagDao.getTagById(tag.getTagId());
+        tag.setStatus(oldTag.getStatus());
+        tag.setCreatedAt(oldTag.getCreatedAt());
+
+        tagDao.updateTag(tag);
+
+
+        return "redirect:/admin/tags";
     }
 
     @GetMapping("/delete-tag")
     public String deleteTagById(Integer id) {
         tagDao.deleteTagById(id);
-        return "redirect:/admin";
+        return "redirect:/admin/tags";
     }
 
-
-
- 
 }
