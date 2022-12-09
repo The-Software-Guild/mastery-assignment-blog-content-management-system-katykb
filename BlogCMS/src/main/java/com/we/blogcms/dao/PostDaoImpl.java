@@ -45,7 +45,7 @@ public class PostDaoImpl implements PostDao{
                 post.getExpirationDate() != null) {
             INSERT_POST = "INSERT INTO post(status,"
                 + "activationDate,expirationDate,title,"
-                + "headline) VALUES(" + daoHelper.SINGLE_QUOTE + post.getStatus() + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
+                + "headline) VALUES(" + daoHelper.SINGLE_QUOTE + post.getStatus().toString() + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
                 + daoHelper.SINGLE_QUOTE + Timestamp.valueOf(post.getActivationDate()) 
                 + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
                 + daoHelper.SINGLE_QUOTE + Timestamp.valueOf(post.getExpirationDate())
@@ -57,8 +57,8 @@ public class PostDaoImpl implements PostDao{
                 post.getExpirationDate() != null) {
            INSERT_POST = "INSERT INTO post(status,"
                 + "expirationDate,title,"
-                + "headline) VALUES(" + daoHelper.SINGLE_QUOTE + post.getStatus() + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
-                + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
+                + "headline) VALUES(" + daoHelper.SINGLE_QUOTE + post.getStatus().toString() + daoHelper.SINGLE_QUOTE
+                + daoHelper.DELIMITER
                 + daoHelper.SINGLE_QUOTE + Timestamp.valueOf(post.getExpirationDate())
                 + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
                 + daoHelper.SINGLE_QUOTE + post.getTitle() + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
@@ -69,7 +69,7 @@ public class PostDaoImpl implements PostDao{
                 post.getExpirationDate() == null) {
         INSERT_POST = "INSERT INTO post(status,"
                 + "activationDate,title,"
-                + "headline) VALUES(" + daoHelper.SINGLE_QUOTE + post.getStatus() + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
+                + "headline) VALUES(" + daoHelper.SINGLE_QUOTE + post.getStatus().toString() + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
                 + daoHelper.SINGLE_QUOTE + Timestamp.valueOf(post.getActivationDate()) 
                 + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
                 + daoHelper.SINGLE_QUOTE + post.getTitle() + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
@@ -79,7 +79,7 @@ public class PostDaoImpl implements PostDao{
                 post.getExpirationDate() == null) {
             INSERT_POST = "INSERT INTO post(status,"
                 + "title,"
-                + "headline) VALUES(" + daoHelper.SINGLE_QUOTE + post.getStatus() + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
+                + "headline) VALUES(" + daoHelper.SINGLE_QUOTE + post.getStatus().toString() + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
                 + daoHelper.SINGLE_QUOTE + post.getTitle() + daoHelper.SINGLE_QUOTE + daoHelper.DELIMITER
                 + daoHelper.SINGLE_QUOTE + post.getHeadline() + daoHelper.SINGLE_QUOTE + ");";
         }

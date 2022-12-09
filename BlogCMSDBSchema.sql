@@ -56,7 +56,7 @@ CREATE TABLE posttag(
 
 CREATE TABLE body(
 	bodyId INT PRIMARY KEY AUTO_INCREMENT,
-    body TEXT NOT NULL
+    body LONGTEXT NOT NULL
 );
 
 CREATE TABLE postbody(
