@@ -15,7 +15,7 @@ xmlns="http://www.w3.org/1999/xhtml">
 <body id="detail">
     <nav class="navbar">
         <div class="navbar__container">
-            <a href="../" id="navbar_logo">Aspire Technology</a>
+            <a href="../../" id="navbar_logo">Aspire Technology</a>
             <div class="navbar_toggle" id="mobile-menu">
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -23,13 +23,13 @@ xmlns="http://www.w3.org/1999/xhtml">
             </div>
             <ul class="navbar__menu">
                 <li class="navbar__item">
-                    <a href="index.html" class="navbar__links">Home</a>                
+                    <a href="../../" class="navbar__links">Home</a>                
                 </li>
                 <li class="navbar__item">
-                    <a href="blogHome.html" class="navbar__links">Blog</a>                
+                    <a href="../blog" class="navbar__links">Blog</a>                
                 </li>
                 <li class="navbar__btn">
-                    <a href="adminLogin.html" class="button">Log In</a>                
+                    <a href="../admin/login" class="button">Log In</a>                
                 </li>
             </ul>
         </div>
@@ -43,7 +43,7 @@ xmlns="http://www.w3.org/1999/xhtml">
                      th:text="|By: ${post.author.displayName}|"></h3>
                  <h3 th:if="${post.author.displayName == null}"
                      th:text="|By: ${post.author.firstName} ${post.author.lastName}|"></h3>
-                <h5 th:text="|Posted on: ${post.activationDate}|">Activated at</h5>
+                <h5 th:text="|Posted on: ${post.createdAt.toString().replace('T', ' ')}|">Activated at</h5>
             </header>
             <div class="d-flex flex-row flex-sm-wrap justify-content-center ">
                 <span th:each="tag : ${post.tags}" th:text="${tag.tag}" class="mr-2 badge btn-primary">

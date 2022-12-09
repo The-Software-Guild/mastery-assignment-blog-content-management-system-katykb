@@ -13,7 +13,7 @@ xmlns="http://www.w3.org/1999/xhtml">
 <body>
     <nav class="navbar">
         <div class="navbar__container">
-            <a href="index.html" id="navbar_logo">Aspire Technology</a>
+            <a href="../" id="navbar_logo">Aspire Technology</a>
             <div class="navbar_toggle" id="mobile-menu">
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -21,16 +21,16 @@ xmlns="http://www.w3.org/1999/xhtml">
             </div>
         <ul class="navbar__menu">
             <li class="navbar__item">
-                <a href="index.html" class="navbar__links">Home</a>                
+                <a href="/admin" class="navbar__links">Home</a>                
             </li>
             <li class="navbar__item">
-                <a href="blogHome.html" class="navbar__links">Blog</a>                
+                <a href="../blog" class="navbar__links">Blog</a>                
             </li>
             <li class="navbar__item">
-                <a href="addBlog.html" class="navbar__links">Add</a>                
+                <a href="../admin/add-blog" class="navbar__links">Add Blog</a>                
             </li>
             <li class="navbar__item">
-                <a href="editBlog.html" class="navbar__links">Manage Tags</a>                
+                <a href="../admin/tags" class="navbar__links">Manage Tags</a>                
             </li>
             
         </ul>
@@ -64,10 +64,10 @@ xmlns="http://www.w3.org/1999/xhtml">
                         <td th:text="${post.title}">Post Title</td>
                         <td th:text="${post.headline}">Post Headline</td>
                         <td th:text="${post.status.toString()}">Status</td>
--->                     <td th:text="${post.activationDate != null} ? ${post.activationDate} : 'N/A'">Activation Date</td>
-                        <td th:text="${post.expirationDate != null} ? ${post.expirationDate} : 'N/A'">Expiration Date</td>
-                        <td th:text="${post.createdAt}">Creation Date</td>
-                        <td th:text="${post.updatedAt}">Last Updated</td>
+-->                     <td th:text="${post.activationDate != null} ? ${post.activationDate.toString().replace('T', ' ')} : 'N/A'">Activation Date</td>
+                        <td th:text="${post.expirationDate != null} ? ${post.expirationDate.toString().replace('T', ' ')} : 'N/A'">Expiration Date</td>
+                        <td th:text="${post.createdAt.toString().replace('T', ' ')}">Creation Date</td>
+                        <td th:text="${post.updatedAt.toString().replace('T', ' ')}">Last Updated</td>
                         <td><a href="#" th:href="@{/admin/edit-blog(id=${post.postId})}">Edit</a></td>
                         <td><a href="#" th:href="@{/admin/delete-blog(id=${post.postId})}">Delete</a></td>
                     </tr>
