@@ -15,7 +15,7 @@ xmlns="http://www.w3.org/1999/xhtml">
 <body id="add">
   <nav class="navbar">
     <div class="navbar__container">
-        <a href="index.html" id="navbar_logo">Aspire Technology</a>
+        <a href="../../" id="navbar_logo">Aspire Technology</a>
         <div class="navbar_toggle" id="mobile-menu">
             <span class="bar"></span>
             <span class="bar"></span>
@@ -23,14 +23,17 @@ xmlns="http://www.w3.org/1999/xhtml">
         </div>
         <ul class="navbar__menu">
             <li class="navbar__item">
-                <a href="index.html" class="navbar__links">Home</a>                
+                <a href="../admin" class="navbar__links">Home</a>                
             </li>
             <li class="navbar__item">
-                <a href="blogHome.html" class="navbar__links">Blog</a>                
+                <a href="../blog" class="navbar__links">Blog</a>                
             </li>
             <li class="navbar__item">
-              <a href="editBlog.html" class="navbar__links">Edit</a>                
+              <a href="../admin/add-blog" class="navbar__links">Add Blog</a>                
           </li>
+        <li class="navbar__item">
+            <a href="../admin/tags" class="navbar__links">Manage Tags</a>                
+        </li>
             <!--took out the link to the log in page
           <li class="navbar__btn">
                 <a href="adminLogin.html" class="button">Log In</a>                
@@ -40,6 +43,9 @@ xmlns="http://www.w3.org/1999/xhtml">
 </nav>
 
   <div class="container">
+      <header class="col text-center border border-light bg-light">
+            <h1><a href="/" class="text-purple-gradient ">Edit Post</a></h1>
+        </header>
       <div>
           <div class="row">
               <div class="col-lg-12">
@@ -65,11 +71,38 @@ xmlns="http://www.w3.org/1999/xhtml">
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label for="dateToActivate" class="col-3 col-form-label">
+                            Activation Time (Optional)</label>
+                        <div class="col-9">
+                           <input th:if="${post.activationDate != null}"th:value="${post.activationDate}" id="dateToActivate" type="datetime-local" name="dateToActivate" class="form-control" >
+                               <input th:if="${post.activationDate == null}" id="dateToActivate" type="datetime-local" name="dateToActivate" class="form-control" >
+                         </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="dateToExpire" class="col-3 col-form-label">
+                            Expiration Time (Optional)</label>
+                        <div class="col-9">
+                           <input th:if="${post.expirationDate != null}" th:value="${post.expirationDate}"id="dateToExpire" type="datetime-local" name="dateToExpire" class="form-control" >
+                           <input th:if="${post.expirationDate == null}" id="dateToExpire" type="datetime-local" name="dateToExpire" class="form-control" >
+                         </div>
+                    </div>
+                    <div class="form-group row">
                         <div class="col-12">
                             <textarea name="bodyText" id="full-featured-non-premium" th:utext="${post.body.body}">
                             
                             </textarea>
                         </div>
+                    </div>
+                    <div class="form-group row">
+                            <label for="postStatus" class="col-3 col-form-label">
+                                Post Status</label>
+                            <div class="col-9">
+                                <select id="postStatus" name="postStatus" class="form-control" >
+                                    <option th:selected="${post.status.toString() == 'active'}">active</option>
+                                    <option th:selected="${post.status.toString() == 'pending'}">pending</option>
+                                    <option th:selected="${post.status.toString() == 'inactive'}">inactive</option>
+                                </select>
+                            </div>
                     </div>
                     <div class="form-group row">
                             <label for="tagIds" class="col-3 col-form-label">

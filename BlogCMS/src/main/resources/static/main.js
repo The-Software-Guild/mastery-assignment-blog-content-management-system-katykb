@@ -1,4 +1,4 @@
 $('button').on('click', function() {
-	$('p').css('opacity', 0);
+	$('p').css('opacity', .5);
 });
 $("input").tagsinput("tagIds");

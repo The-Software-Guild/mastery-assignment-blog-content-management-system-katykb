@@ -13,7 +13,7 @@ xmlns="http://www.w3.org/1999/xhtml">
 <body>
     <nav class="navbar">
         <div class="navbar__container">
-            <a href="index.html" id="navbar_logo">Aspire Technology</a>
+            <a href="../../" id="navbar_logo">Aspire Technology</a>
             <div class="navbar_toggle" id="mobile-menu">
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -21,16 +21,16 @@ xmlns="http://www.w3.org/1999/xhtml">
             </div>
         <ul class="navbar__menu">
             <li class="navbar__item">
-                <a href="index.html" class="navbar__links">Home</a>                
+                <a href="../admin" class="navbar__links">Home</a>                
             </li>
             <li class="navbar__item">
-                <a href="blogHome.html" class="navbar__links">Blog</a>                
+                <a href="../blog" class="navbar__links">Blog</a>                
             </li>
             <li class="navbar__item">
-                <a href="addBlog.html" class="navbar__links">Add</a>                
+                <a href="../admin/add-blog" class="navbar__links">Add Post</a>                
             </li>
             <li class="navbar__item">
-                <a href="editBlog.html" class="navbar__links">Manage Tags</a>                
+                <a href="../admin/tags" class="navbar__links">Manage Tags</a>                
             </li>
             
         </ul>
@@ -41,37 +41,28 @@ xmlns="http://www.w3.org/1999/xhtml">
             <h1><a href="/" class="text-purple-gradient">Manage Tags</a></h1>
         </header>
     <section class="d-flex flex-column flex-sm-wrap justify-content-center text-center">
-        <form th:if="${tag == null}" action="/admin/add-tag" method="POST">
-            <div class="form-group row">
-                <label for="tag" class="col-3 col-form-label">
-                    Tag Name</label>
+        <form th:if="${tag == null}" action="/admin/add-tag" method="POST" class="text-center">
+            <div class="form-group row d-flex flex-column flex-sm-wrap justify-content-center align-items-center">
+                <label for="tag" class="col-3 col-form-label text-purple-gradient display-3">
+                    Add Tag</label>
                 <div class="col-9">
-                    <input id="tag" type="text" name="tag" class="form-control">
+                    <input id="tag" type="text" name="tag" class="form-control text-center">
 
                 </div>
             </div>
-
-            <div class="form-group row">
-                <button type="submit" class="main__btn" >Save Tag</button>
-            </div>
+              <button type="submit" class="main__btn" >Save Tag</button>
         </form>
 
         <!-- This form is for editing a tag -->
-        <form th:if="${tag != null}" action="/admin/edit-tag" method="POST">
+        <form th:if="${tag != null}" action="/admin/edit-tag" method="POST" class="text-center">
             <input
                     hidden type="text" id="tagId" name="tagId" th:value="${tag.tagId}">
-            <div class="form-group row">
-                <label for="tag" class="col-3 col-form-label">
-                    Tag Name</label>
-                <div class="col-9">
-                    <input id="tag" type="text" name="tag" class="form-control" th:value="${tag.tag}">
-
-                </div>
+            <div class="form-group row d-flex flex-column flex-sm-wrap justify-content-center align-items-center">
+                <label for="tag" class="col-3 col-form-label text-purple-gradient">
+                    Edit tag</label>
+                    <input id="tag" type="text" name="tag" class="form-control text-center" th:value="${tag.tag}">
             </div>
-
-            <div class="form-group row">
-                <button type="submit" class="main__btn" >Save Tag</button>
-            </div>
+                <button type="submit" class="main__btn" >Edit Tag</button>
         </form>
 
             <table class="table table-striped">
@@ -80,13 +71,15 @@ xmlns="http://www.w3.org/1999/xhtml">
                         <th scope="col">ID</th>
                         <th scope="col">Tag</th>
                         <th scope="col">Creation Date</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="tag : ${tags}">
                         <td scope="row" th:text="${tag.tagId}">Tag ID</td>
                         <td th:text="${tag.tag}">Tag Name</td>
-                        <td th:text="${tag.createdAt}">Tag Creation Date</td>
+                        <td th:text="${tag.createdAt.toString().replace('T', ' ')}">Tag Creation Date</td>
                         <td><a href="#" th:href="@{/admin/tags(id=${tag.tagId})}">Edit</a></td>
                         <td><a href="#" th:href="@{/admin/delete-tag(id=${tag.tagId})}">Delete</a></td>
                     </tr>

@@ -22,6 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
@@ -133,6 +134,23 @@ public class AdminController {
     
     @PostMapping("/add-blog")
     public String addBlog(Post post, HttpServletRequest request) {
+        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String stringActivationDate = request.getParameter(
+                        "dateToActivate");
+        LocalDateTime activationDate = null;
+        if (!stringActivationDate.isEmpty()) {
+            stringActivationDate = stringActivationDate.replace("T", " ");
+            activationDate = LocalDateTime.parse(
+                stringActivationDate, formatter);
+        }
+        String stringExpirationDate = request.getParameter(
+                        "dateToExpire");
+        LocalDateTime expirationDate = null;
+        if (!stringExpirationDate.isEmpty()) {
+            stringExpirationDate = stringExpirationDate.replace("T", " ");
+            expirationDate = LocalDateTime.parse(stringExpirationDate, formatter);
+        }
+        final Status postStatus = Status.valueOf(request.getParameter("postStatus"));
         String[] tagIds = request.getParameterValues("tagIds");
         final Body body = new Body();
         body.setBody(request.getParameter("bodyText"));
@@ -141,7 +159,9 @@ public class AdminController {
         post.setTags(postTags);
         post.setBody(body);
         post.setAuthor(author);
-        post.setStatus(Status.active);
+        post.setActivationDate(activationDate);
+        post.setExpirationDate(expirationDate);
+        post.setStatus(postStatus);
         post.setCreatedAt(LocalDateTime.now());
         post.setUpdatedAt(LocalDateTime.now());
 
@@ -163,6 +183,23 @@ public class AdminController {
     @PostMapping("/edit-blog")
     public String editBlog(Post post, HttpServletRequest request) {
         final Post existingPost = postDao.getPostById(post.getPostId());
+        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String stringActivationDate = request.getParameter(
+                        "dateToActivate");
+        LocalDateTime activationDate = null;
+        if (!stringActivationDate.isEmpty()) {
+            stringActivationDate = stringActivationDate.replace("T", " ");
+            activationDate = LocalDateTime.parse(
+                stringActivationDate, formatter);
+        }
+        String stringExpirationDate = request.getParameter(
+                        "dateToExpire");
+        LocalDateTime expirationDate = null;
+        if (!stringExpirationDate.isEmpty()) {
+            stringExpirationDate = stringExpirationDate.replace("T", " ");
+            expirationDate = LocalDateTime.parse(stringExpirationDate, formatter);
+        }
+        final Status postStatus = Status.valueOf(request.getParameter("postStatus"));
         String[] tagIds = request.getParameterValues("tagIds");
         final Body body = bodyDao.getBodyById(Integer.parseInt(request.getParameter("bodyId")));
         body.setBody(request.getParameter("bodyText"));
@@ -176,15 +213,9 @@ public class AdminController {
         post.setAuthor(author);
         post.setCreatedAt(existingPost.getCreatedAt());
         post.setUpdatedAt(LocalDateTime.now());
-        if (post.getStatus() == null) {
-            post.setStatus(existingPost.getStatus());
-        }
-        if (post.getActivationDate() == null) {
-            post.setActivationDate(existingPost.getActivationDate());
-        }
-        if (post.getExpirationDate() == null) {
-            post.setExpirationDate(existingPost.getExpirationDate());
-        }
+        post.setActivationDate(activationDate);
+        post.setExpirationDate(expirationDate);
+        post.setStatus(postStatus);
         postDao.updatePost(post);
         return "redirect:/admin";
     }
@@ -256,7 +287,9 @@ public class AdminController {
 
     @GetMapping("/delete-tag")
     public String deleteTagById(Integer id) {
-        tagDao.deleteTagById(id);
+        final Tag tag = tagDao.getTagById(id);
+        tag.setStatus(Status.deleted);
+        tagDao.updateTag(tag);
         return "redirect:/admin/tags";
     }
 
