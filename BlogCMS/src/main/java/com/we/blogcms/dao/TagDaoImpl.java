@@ -82,6 +82,18 @@ public class TagDaoImpl implements TagDao{
         jdbc.update(DELETE_TAG,tagId);
     }
 
+    @Override
+    @Transactional
+    public void updateTag(Tag tag){
+        final String UPDATE_TAG_BY_ID = "UPDATE tag SET status = ?, tag = ?, createdAt = ? WHERE tagId = ?";
+        jdbc.update(UPDATE_TAG_BY_ID,
+                tag.getStatus().toString(),
+                tag.getTag(),
+                tag.getCreatedAt(),
+                tag.getTagId());
+
+    }
+
     public static final class TagMapper implements RowMapper<Tag>{
         @Override
         public Tag mapRow (ResultSet rs, int index) throws SQLException{

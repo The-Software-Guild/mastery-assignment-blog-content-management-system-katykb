@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
+import jakarta.validation.constraints.PastOrPresent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.quartz.QuartzTransactionManager;
 import org.springframework.stereotype.Controller;
@@ -115,16 +116,12 @@ public class AdminController {
     }
 
     // this is currently not working
-    @GetMapping("/content")
-    public String viewAllPosts(HttpServletRequest request, Model model) {
-        model.addAttribute("posts", postDao.getAllPosts());
-        return "blogHome";
-    }
+//    @GetMapping("/content")
+//    public String viewAllPosts(HttpServletRequest request, Model model) {
+//        model.addAttribute("posts", postDao.getAllPosts());
+//        return "blogHome";
+//    }
 
-    @PostMapping("/content")
-    public String editPost() {
-        return "redirect:/admin";
-    }
 
     // this one works
     @GetMapping("/add-blog")
@@ -150,13 +147,6 @@ public class AdminController {
 
         postDao.addPost(post);
         return "redirect:/admin";
-    }
-    
-    @GetMapping("/tags")
-    public String getManageTagsPage(Model model) {
-        final List<Tag> allTags = tagDao.getAllTagsForStatuses(Status.active);
-        model.addAttribute("tags", allTags);
-        return "manageTags";
     }
     
     @GetMapping("/edit-blog")
@@ -222,5 +212,52 @@ public class AdminController {
                 .collect(Collectors.toList());
         return tagIdList;
     }
- 
+
+
+    @GetMapping("/add-tag")
+    public String getAddTagPage() {
+        return "redirect:/admin/tags";
+    }
+
+
+    @PostMapping("/add-tag")
+    public String createNewTag(Tag tag) {
+
+        tagDao.addTag(tag);
+
+        return "redirect:/admin/tags";
+
+    }
+
+    @GetMapping("/tags")
+    public String getManageTagsPage(Model model, @RequestParam(required = false) Integer id) {
+        Tag tag = null;
+        if (id != null) {
+            tag = tagDao.getTagById(id);
+        }
+
+        final List<Tag> allTags = tagDao.getAllTagsForStatuses(Status.active);
+        model.addAttribute("tags", allTags);
+        model.addAttribute("tag", tag);
+        return "manageTags";
+    }
+
+    @PostMapping("/edit-tag")
+    public  String editTag(Tag tag){
+        final Tag oldTag = tagDao.getTagById(tag.getTagId());
+        tag.setStatus(oldTag.getStatus());
+        tag.setCreatedAt(oldTag.getCreatedAt());
+
+        tagDao.updateTag(tag);
+
+
+        return "redirect:/admin/tags";
+    }
+
+    @GetMapping("/delete-tag")
+    public String deleteTagById(Integer id) {
+        tagDao.deleteTagById(id);
+        return "redirect:/admin/tags";
+    }
+
 }

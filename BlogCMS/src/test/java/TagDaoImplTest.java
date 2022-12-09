@@ -121,4 +121,21 @@ class TagDaoImplTest {
         assertNull(fromDao);
 
     }
+
+    @Test
+    void updateTag() {
+        Tag tag = new Tag();
+        tag.setTag("Travel");
+        tag.setStatus(Status.active);
+        tag = tagDao.addTag(tag);
+        tag = tagDao.getTagById(tag.getTagId());
+
+        tag.setStatus(Status.deleted);
+        tagDao.updateTag(tag);
+        tag = tagDao.getTagById(tag.getTagId());
+
+        assertTrue(tag.getStatus() == Status.deleted);
+    }
+
+
 }
